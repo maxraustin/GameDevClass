@@ -2,13 +2,28 @@
 using System.Collections;
 using System;
 
+enum ControlType { Legacy, Mouse };
 public class PlayerController : MonoBehaviour {
+    static PlayerController current;
+
+    [SerializeField]
+    ControlType controlType = ControlType.Mouse;
+
+    [SerializeField]
+    GameObject reticule;
+
     UnitInfo myInfo;
     WeaponsController weaponsController;
     Rigidbody myRigidbody;
 
-    int throttlePercentage = 0;
-    
+    int throttlePercentage = 15;
+    bool mouseControlsEnabled = true;
+
+    void Awake()
+    {
+        current = this;
+        UnitTracker.playerShip = gameObject;
+    }
 
     void Start()
     {
@@ -19,18 +34,23 @@ public class PlayerController : MonoBehaviour {
         CursorController.ShowCursor(false); //This should be handled in game controller once set up.
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     void Update()
     {
-        AdjustThrottle();
+        Vector3 reticuleLocation = transform.position + (transform.forward * 50);
+        reticule.transform.position = reticuleLocation;
+
         if (Input.GetButton("Fire1"))
             weaponsController.FirePrimaryWeapon();
     }
 
+    /// <summary>
+    /// Property to get current static reference.
+    /// </summary>
+    public static PlayerController Current { get { return current; } }
+
     void FixedUpdate ()
     {
+        AdjustThrottle();
         Rotate();
         SetVelocity();
     }
@@ -43,21 +63,40 @@ public class PlayerController : MonoBehaviour {
         float keyboardInputVertical = Input.GetAxisRaw("Vertical");
 
         if (keyboardInputVertical > 0 && throttlePercentage < 100)
+        {
             throttlePercentage++;
-        else if (keyboardInputVertical < 0 && throttlePercentage > 0)
+            UIElementsTracker.Current.GetThrottleTextController().UpdateThrottleRate(throttlePercentage);
+        }
+        else if (keyboardInputVertical < 0 && throttlePercentage > 15)
+        {
             throttlePercentage--;
+            UIElementsTracker.Current.GetThrottleTextController().UpdateThrottleRate(throttlePercentage);
+        }
     }
 
     void Rotate()
     {
-        float keyboardInputHorizontal = Input.GetAxisRaw("Horizontal");
-        float mouseInputVertical = Input.GetAxisRaw("Mouse Y");
+        if (controlType == ControlType.Legacy)
+        {
+            //float keyboardInputHorizontal = Input.GetAxisRaw("Horizontal");
+            float mouseInputVertical = 0;
+            if (mouseControlsEnabled)
+                mouseInputVertical = Input.GetAxisRaw("Mouse Y");
+            float mouseInputHorizontal= 0;
+            if (mouseControlsEnabled)
+                mouseInputHorizontal = Input.GetAxisRaw("Mouse X");
 
-        transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(mouseInputVertical, 0, -keyboardInputHorizontal));
+            transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(mouseInputVertical, 0, -mouseInputHorizontal));
+        }
+    }
+
+    public void SetMouseControlsEnabled(bool enabled)
+    {
+        mouseControlsEnabled = enabled;
     }
 
     void SetVelocity()
     {
-        myRigidbody.velocity = transform.forward * myInfo.GetMaxSpeed() * ((float)throttlePercentage / 100);
+        myRigidbody.velocity = transform.forward * myInfo.MaxSpeed * ((float)throttlePercentage / 100);
     }
 }
