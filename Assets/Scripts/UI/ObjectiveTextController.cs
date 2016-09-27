@@ -2,13 +2,28 @@
 using System.Collections;
 using UnityEngine.UI;
 
+public enum ObjectiveTextType { NEUTRALIZE };
 /// <summary>
-/// Controller for objective text element.
+/// Controller for objective UI display.
 /// </summary>
 public class ObjectiveTextController : MonoBehaviour
 {
-    public void UpdateEnemyCount(int enemyCount)
+    public ObjectiveTextType ObjectiveType { get; set; }
+
+    public void UpdateObjectiveCount(int count)
     {
-        GetComponent<Text>().text = "Enemies Remaining: " + enemyCount;
+        string objectiveString = string.Empty;
+
+        if (ObjectiveType == ObjectiveTextType.NEUTRALIZE)
+            objectiveString = "Enemies Remaining: " + count;
+
+        GetComponent<Text>().text = objectiveString;
     }
+
+    public void SetObjectiveText(string text)
+    {
+        GetComponent<Text>().text = text;
+    }
+
+    
 }

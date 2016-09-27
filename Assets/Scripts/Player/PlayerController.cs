@@ -4,13 +4,13 @@ using System;
 
 enum ControlType { Legacy, Mouse };
 public class PlayerController : MonoBehaviour {
-    static PlayerController current;
+    static PlayerController instance;
 
     [SerializeField]
     ControlType controlType = ControlType.Mouse;
 
     [SerializeField]
-    GameObject reticule;
+    GameObject reticule; //This is a terrible way to implement a targetting reticule but it was fast, should reimplement.
 
     UnitInfo myInfo;
     WeaponsController weaponsController;
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
 
     void Awake()
     {
-        current = this;
+        instance = this;
         UnitTracker.playerShip = gameObject;
     }
 
@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour {
         myRigidbody = GetComponent<Rigidbody>();
 
         CursorController.ShowCursor(false); //This should be handled in game controller once set up.
+        if (HUDController.Instance != null) HUDController.Instance.SetThrottleTextPercentage(throttlePercentage);
     }
 
     void Update()
@@ -43,17 +44,17 @@ public class PlayerController : MonoBehaviour {
             weaponsController.FirePrimaryWeapon();
     }
 
-    /// <summary>
-    /// Property to get current static reference.
-    /// </summary>
-    public static PlayerController Current { get { return current; } }
-
     void FixedUpdate ()
     {
         AdjustThrottle();
         Rotate();
         SetVelocity();
     }
+
+    /// <summary>
+    /// Property to get the current PlayerController instance.
+    /// </summary>
+    public static PlayerController Instance { get { return instance; } }
 
     /// <summary>
     /// 
@@ -65,12 +66,12 @@ public class PlayerController : MonoBehaviour {
         if (keyboardInputVertical > 0 && throttlePercentage < 100)
         {
             throttlePercentage++;
-            UIElementsTracker.Current.GetThrottleTextController().UpdateThrottleRate(throttlePercentage);
+            if (HUDController.Instance != null) HUDController.Instance.SetThrottleTextPercentage(throttlePercentage);
         }
         else if (keyboardInputVertical < 0 && throttlePercentage > 15)
         {
             throttlePercentage--;
-            UIElementsTracker.Current.GetThrottleTextController().UpdateThrottleRate(throttlePercentage);
+            if (HUDController.Instance != null) HUDController.Instance.SetThrottleTextPercentage(throttlePercentage);
         }
     }
 

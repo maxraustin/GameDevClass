@@ -3,18 +3,18 @@ using System.Collections;
 using UnityEngine.UI;
 
 /// <summary>
-/// Keeps references of ingame UI elements.
+/// Singleton class that sets and keeps references of ingame UI elements. Should be attached as a component on the Canvas gameObject.
 /// </summary>
 public class UIElementsTracker : MonoBehaviour {
-    static UIElementsTracker current;
+    static UIElementsTracker instance;
 
-    GameObject menu, timerText, throttleText, objectiveText;
+    GameObject menu, hud;
 
     bool hasInitialized = false;
 
     void Awake()
     {
-        current = this;
+        instance = this;
     }
 
     void Start()
@@ -28,47 +28,35 @@ public class UIElementsTracker : MonoBehaviour {
         if (!hasInitialized)
         {
             menu = transform.Find("Menu").gameObject;
-            timerText = transform.Find("TimerText").gameObject;
-            throttleText = transform.Find("ThrottleText").gameObject;
-            objectiveText = transform.Find("ObjectiveText").gameObject;
+            hud = transform.Find("HUD").gameObject;
             hasInitialized = true;
         }
     }
 
     /// <summary>
-    /// Property to get current static reference.
+    /// Property to get the current UIElementsTracker instance.
     /// </summary>
-    public static UIElementsTracker Current { get { return current; } }
+    public static UIElementsTracker Instance { get { return instance; } }
 
-    public GameObject GetMenu()
+    public GameObject Hud
     {
-        if (!hasInitialized)
-            Initialize();
+        get
+        {
+            if (!hasInitialized)
+                Initialize();
 
-        return menu;
+            return hud;
+        }
     }
 
-    public TimerTextController GetTimerTextController()
+    public GameObject Menu
     {
-        if (!hasInitialized)
-            Initialize();
+        get
+        {
+            if (!hasInitialized)
+                Initialize();
 
-        return timerText.GetComponent<TimerTextController>();
-    }
-
-    public ThrottleTextController GetThrottleTextController()
-    {
-        if (!hasInitialized)
-            Initialize();
-
-        return throttleText.GetComponent<ThrottleTextController>();
-    }
-
-    public ObjectiveTextController GetObjectiveTextController()
-    {
-        if (!hasInitialized)
-            Initialize();
-
-        return objectiveText.GetComponent<ObjectiveTextController>();
+            return menu;
+        }
     }
 }

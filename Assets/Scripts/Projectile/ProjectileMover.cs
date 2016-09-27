@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// Handles a projectile's movement.
+/// Moves a projectile in a straight line.
 /// </summary>
 public class ProjectileMover : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class ProjectileMover : MonoBehaviour
     /// <summary>
     /// Adds a base velocity vector to the projectile.
     /// </summary>
-    /// <param name="velVector"></param>
+    /// <param name="velVector">The velocity vector to add to our base velocity.</param>
     public void AddVelocity(Vector3 velVector)
     {
         adjustedVelocity = velVector;

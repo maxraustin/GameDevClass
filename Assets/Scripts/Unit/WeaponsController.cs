@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Controls firing of a units' weapons.
+/// </summary>
 public class WeaponsController: MonoBehaviour
 {
     [SerializeField]

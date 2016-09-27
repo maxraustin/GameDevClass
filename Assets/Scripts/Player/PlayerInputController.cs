@@ -9,18 +9,20 @@ public class PlayerInputController : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            MenuController.Current.ToggleMenu();
+            MenuController.Instance.ToggleMenu();
 
+        /* Free looking around ship without rotating it. *NOT YET IMPLEMENTED*
         if (Input.GetKeyDown(KeyCode.C))
         {
-            PlayerCameraController.Current.SetFreeLookActive(true);
-            PlayerController.Current.SetMouseControlsEnabled(false);
+            CameraController.PlayerCameraControllerInstance.SetFreeLookActive(true);
+            PlayerController.Instance.SetMouseControlsEnabled(false);
         }
 
         if (Input.GetKeyUp(KeyCode.C))
         {
-            PlayerCameraController.Current.SetFreeLookActive(false);
-            PlayerController.Current.SetMouseControlsEnabled(true);
+            CameraController.PlayerCameraControllerInstance.SetFreeLookActive(true);
+            PlayerController.Instance.SetMouseControlsEnabled(true);
         }
+        */
     }
 }

@@ -2,14 +2,18 @@
 using System.Collections;
 using UnityEngine.UI;
 
+public enum TimerTextType { ELAPSED = 1, REMAINING = 0 };
 /// <summary>
-/// Controller for timer text element.
+/// Controller for timer UI display.
 /// </summary>
 public class TimerTextController : MonoBehaviour
 {
+    public TimerTextType TimerType { get; set; }
+
     public void UpdateTimeElapsed(float time)
     {
         System.Text.StringBuilder timeString = new System.Text.StringBuilder();
+        timeString.Append((TimerType == TimerTextType.ELAPSED) ? "Elapsed: " : "Remaining: ");
 
         if (time < 0)
             timeString.Append("-");

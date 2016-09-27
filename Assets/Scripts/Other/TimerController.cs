@@ -3,21 +3,20 @@ using System.Collections;
 using UnityEngine.UI;
 
 /// <summary>
-/// Singleton that provides timer functionality.
+/// Singleton class that provides timer functionality.
 /// </summary>
 public class TimerController : MonoBehaviour
 {
-    public static TimerController current;
+    static TimerController instance;
+
     float timeElapsed;
     float startTime;
     bool timerStopped = true;
     bool countingUp= false;
-    //Text timerText;
-    TimerTextController timerTextController;
 
     void Awake()
     {
-        current = this;
+        instance = this;
     }
 
     void Update()
@@ -26,15 +25,14 @@ public class TimerController : MonoBehaviour
         {
             timeElapsed += Time.deltaTime;
 
-            if (timerTextController != null)
-            {
-                if (countingUp)
-                    timerTextController.UpdateTimeElapsed(timeElapsed);
-                else
-                    timerTextController.UpdateTimeElapsed(startTime - timeElapsed);
-            }
+            if (HUDController.Instance != null) HUDController.Instance.SetTimerTextTime(countingUp ? timeElapsed : startTime - timeElapsed);
         }
     }
+
+    /// <summary>
+    /// Property to get the current TimerController instance.
+    /// </summary>
+    public static TimerController Instance { get { return instance; } }
 
     /// <summary>
     /// Gets timeElapsed if counting up, gets time remaining if counting down.
@@ -74,18 +72,6 @@ public class TimerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets timerText Text reference.
-    /// </summary>
-    /// <param name="_text"></param>
-    public void SetTimerText(TimerTextController _ttc)
-    {
-        if (_ttc == null)
-            throw new System.Exception("TimerTextController is null!");
-
-        timerTextController = _ttc;
-    }
-
-    /// <summary>
     /// Starts countdown timer at countdownTime in seconds.
     /// </summary>
     /// <param name="countdownTime"></param>
@@ -93,18 +79,7 @@ public class TimerController : MonoBehaviour
     {
         startTime = countdownTime;
         countingUp = false;
-        RestartTimer();
-    }
-
-    /// <summary>
-    /// Starts countdown timer at countdownTime in seconds and sets timerTextController reference.
-    /// </summary>
-    /// <param name="countdownTime"></param>
-    public void StartCountdown(float countdownTime, TimerTextController _ttc)
-    {
-        startTime = countdownTime;
-        countingUp = false;
-        SetTimerText(_ttc);
+        if (HUDController.Instance != null) HUDController.Instance.SetTimerTextType(TimerTextType.REMAINING);
         RestartTimer();
     }
 
@@ -114,16 +89,7 @@ public class TimerController : MonoBehaviour
     public void StartStopwatch()
     {
         countingUp = true;
-        RestartTimer();
-    }
-
-    /// <summary>
-    /// Starts timer at 0s elapsed and sets timerTextController reference.
-    /// </summary>
-    public void StartStopwatch(TimerTextController _ttc)
-    {
-        countingUp = true;
-        SetTimerText(_ttc);
+        if (HUDController.Instance != null) HUDController.Instance.SetTimerTextType(TimerTextType.ELAPSED);
         RestartTimer();
     }
 }   

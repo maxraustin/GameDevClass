@@ -14,14 +14,14 @@ public class TestGameController : MonoBehaviour
     {
         if (Time.timeScale != 1)
             Time.timeScale = 1;
-        TimerController.current.StartCountdown(60, UIElementsTracker.Current.GetTimerTextController());
+        TimerController.Instance.StartCountdown(60);
     }
 
     // Update is called once per frame
     void Update()
     {
-        UIElementsTracker.Current.GetObjectiveTextController().UpdateEnemyCount(UnitTracker.GetActiveEnemyCount());
-        if (UnitTracker.GetActiveEnemyCount() == 0 && UnitTracker.playerShip != null && TimerController.current.GetTime() > 0)
+        HUDController.Instance.SetObjectiveCount(UnitTracker.GetActiveEnemyCount());
+        if (UnitTracker.GetActiveEnemyCount() == 0 && UnitTracker.playerShip != null && TimerController.Instance.GetTime() > 0)
         {
             winText.SetActive(true);
         }
@@ -32,7 +32,7 @@ public class TestGameController : MonoBehaviour
             StartCoroutine(Restart());
         }
 
-        if (TimerController.current.GetTime() <= 0)
+        if (TimerController.Instance.GetTime() <= 0)
         {
             loseText.SetActive(true);
             StartCoroutine(Restart());
@@ -43,6 +43,6 @@ public class TestGameController : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene("test");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }

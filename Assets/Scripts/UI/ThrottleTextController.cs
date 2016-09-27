@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 /// <summary>
-/// Controller for throttle text element.
+/// Controller for throttle UI display.
 /// </summary>
 public class ThrottleTextController : MonoBehaviour
 {

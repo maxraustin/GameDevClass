@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// 
+/// Manages health and shields of a unit.
 /// </summary>
 public class Health : MonoBehaviour
 {
@@ -10,11 +10,13 @@ public class Health : MonoBehaviour
     int currentHealth;
     int currentShields;
 
-    // Use this for initialization
     void Start()
     {
         myInfo = GetComponent<UnitInfo>();
         currentHealth = myInfo.MaxHealth;
+        currentShields = myInfo.MaxShields;
+
+        AdjustHPDisplay();
     }
 
     public void AddLife(int life)
@@ -24,7 +26,26 @@ public class Health : MonoBehaviour
         if (currentHealth > myInfo.MaxHealth)
             currentHealth = myInfo.MaxHealth;
 
-        //AdjustHPDisplay();
+        AdjustHPDisplay();
+    }
+
+    public void AddShields(int shields)
+    {
+        currentShields += shields;
+
+        if (currentShields > myInfo.MaxShields)
+            currentShields = myInfo.MaxShields;
+
+        AdjustHPDisplay();
+    }
+
+    void AdjustHPDisplay()
+    {
+        if (myInfo.IsPlayerShip)
+        {
+            if (HUDController.Instance != null) HUDController.Instance.SetHealth(currentHealth, myInfo.MaxHealth);
+            if (HUDController.Instance != null) HUDController.Instance.SetShields(currentShields, myInfo.MaxShields);
+        }
     }
 
     void Die()
@@ -37,14 +58,24 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
-        currentHealth -= dmg;
+        if (currentShields >= dmg)
+        {
+            currentShields -= dmg;
+            AdjustHPDisplay();
+        }
+        else
+        {
+            dmg -= currentShields;
+            currentShields = 0;
+            currentHealth -= dmg;
 
-        if (currentHealth < 0)
-            currentHealth = 0;
+            if (currentHealth < 0)
+                currentHealth = 0;
 
-        //AdjustHPDisplay();
+            AdjustHPDisplay();
 
-        if (currentHealth == 0)
-            Die();
+            if (currentHealth == 0)
+                Die();
+        }
     }
 }

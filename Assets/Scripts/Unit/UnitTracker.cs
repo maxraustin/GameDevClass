@@ -31,7 +31,7 @@ public class UnitTracker : MonoBehaviour
         if (!hasInitialized)
             Initialize();
 
-        //activeEnemies.RemoveAll(enemy => enemy == null);
+        activeEnemies.RemoveAll(enemy => enemy == null);
 
         return activeEnemies.Count;
     }
@@ -41,7 +41,7 @@ public class UnitTracker : MonoBehaviour
         if (!hasInitialized)
             Initialize();
 
-        //activeEnemies.RemoveAll(enemy => enemy == null);
+        activeEnemies.RemoveAll(enemy => enemy == null);
 
         return activeEnemies;
     }

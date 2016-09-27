@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// Contains information about a unit's maxHealth, maxShields, maxSpeed, weapon cooldowns, and explosion.
+/// Contains information about a unit's maxHealth, maxShields, maxSpeed, weapon cooldowns, explosion object, and if it is a player controlled ship.
 /// </summary>
 public class UnitInfo : MonoBehaviour
 {
@@ -27,6 +27,9 @@ public class UnitInfo : MonoBehaviour
     [SerializeField]
     GameObject explosion;
 
+    [SerializeField]
+    bool isPlayerShip;
+
     public float CooldownPrimary
     {
         get { return cooldownPrimary; }
@@ -48,6 +51,11 @@ public class UnitInfo : MonoBehaviour
     public GameObject Explosion
     {
         get { return explosion; }
+    }
+
+    public bool IsPlayerShip
+    {
+        get { return isPlayerShip; }
     }
 
     public int MaxHealth
