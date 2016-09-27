@@ -50,9 +50,12 @@ public class WeaponsController: MonoBehaviour
         {
             //Create projectile.
             GameObject projectile = Instantiate(primaryWeapon, tf.position, tf.rotation) as GameObject;
-            //Set projectile's owner.
+            //Set projectile's owner and teamID.
             if (projectile.GetComponent<ProjectileInfo>() != null)
-                projectile.GetComponent<ProjectileInfo>().owner = gameObject;
+            {
+                projectile.GetComponent<ProjectileInfo>().Owner = gameObject;
+                projectile.GetComponent<ProjectileInfo>().TeamID = myInfo.TeamID;
+            }
             //Adjust projectile's velocity based on our velocity.
             if (projectile.GetComponent<ProjectileMover>() != null && GetComponent<Rigidbody>() != null)
                 projectile.GetComponent<ProjectileMover>().AddVelocity(GetComponent<Rigidbody>().velocity);

@@ -6,17 +6,29 @@ using System.Collections;
 /// </summary>
 public class Health : MonoBehaviour
 {
+    public delegate void DeathAction();
+    public static event DeathAction OnPlayerDeath;
+    public static event DeathAction OnUnitDeath;
+
     UnitInfo myInfo;
     int currentHealth;
     int currentShields;
+    float shieldRegenRate;
+    float nextShieldRegenTime;
 
     void Start()
     {
         myInfo = GetComponent<UnitInfo>();
         currentHealth = myInfo.MaxHealth;
         currentShields = myInfo.MaxShields;
+        shieldRegenRate = myInfo.ShieldRegenRate;
 
         AdjustHPDisplay();
+    }
+
+    void Update()
+    {
+        CheckShieldRegen();
     }
 
     public void AddLife(int life)
@@ -25,6 +37,8 @@ public class Health : MonoBehaviour
 
         if (currentHealth > myInfo.MaxHealth)
             currentHealth = myInfo.MaxHealth;
+        else if (currentHealth < 0)
+            currentHealth = 0;
 
         AdjustHPDisplay();
     }
@@ -35,6 +49,8 @@ public class Health : MonoBehaviour
 
         if (currentShields > myInfo.MaxShields)
             currentShields = myInfo.MaxShields;
+        else if (currentShields < 0)
+            currentShields = 0;
 
         AdjustHPDisplay();
     }
@@ -48,10 +64,54 @@ public class Health : MonoBehaviour
         }
     }
 
+    void CheckShieldRegen()
+    {
+        if (shieldRegenRate != myInfo.ShieldRegenRate)
+        {
+            if (shieldRegenRate == 0)
+                nextShieldRegenTime = Time.time + (1 / myInfo.ShieldRegenRate);
+            else
+                nextShieldRegenTime += (1 / myInfo.ShieldRegenRate) - (1 / shieldRegenRate);
+
+            shieldRegenRate = myInfo.ShieldRegenRate;
+        }
+
+        if (shieldRegenRate != 0 && Time.time >= nextShieldRegenTime)
+        {
+            nextShieldRegenTime = Time.time + (1 / Mathf.Abs(shieldRegenRate));
+            AddShields((shieldRegenRate > 0) ? 1 : -1);
+        }
+    }
+
     void Die()
     {
         if (myInfo.Explosion != null)
             Instantiate(myInfo.Explosion, transform.position, transform.rotation);
+
+        //If this unit is not the player: Remove it from the unitTracker and raise the OnUnitDeath event.
+        if (!myInfo.IsPlayerShip) {
+            UnitTracker.RemoveUnit(gameObject);
+            try { 
+            if (OnUnitDeath != null)
+                OnUnitDeath();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex.Message);
+            }
+        }
+        else //If this unit is the player: Remove its reference in the unitTracker and raise the OnPlayerDeath event.
+        {
+            UnitTracker.PlayerShip = null;
+            try {
+                if (OnPlayerDeath != null)
+                    OnPlayerDeath();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex.Message + ex.StackTrace);
+            }
+        }
 
         Destroy(gameObject);
     }

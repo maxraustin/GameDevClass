@@ -7,12 +7,16 @@ using UnityEngine.UI;
 /// </summary>
 public class TimerController : MonoBehaviour
 {
+    public delegate void TimerAction();
+    public static event TimerAction OnTimerExpired;
+
     static TimerController instance;
 
     float timeElapsed;
     float startTime;
     bool timerStopped = true;
-    bool countingUp= false;
+    bool countingUp = false;
+    bool timerExpired = false;
 
     void Awake()
     {
@@ -26,6 +30,14 @@ public class TimerController : MonoBehaviour
             timeElapsed += Time.deltaTime;
 
             if (HUDController.Instance != null) HUDController.Instance.SetTimerTextTime(countingUp ? timeElapsed : startTime - timeElapsed);
+
+            //If we are counting down and time has expired: Raise the OnTimerExpired event.
+            if (!countingUp && !timerExpired && GetTime() <= 0)
+            {
+                timerExpired = true;
+                if (OnTimerExpired != null)
+                    OnTimerExpired();
+            }
         }
     }
 
@@ -69,6 +81,7 @@ public class TimerController : MonoBehaviour
     {
         timeElapsed = 0;
         timerStopped = false;
+        timerExpired = false;
     }
 
     /// <summary>

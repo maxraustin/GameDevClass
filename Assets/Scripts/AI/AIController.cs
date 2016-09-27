@@ -13,18 +13,14 @@ public class AIController : MonoBehaviour
     GameObject target;
     int throttlePercentage = 15;
 
-    void Awake()
-    {
-        UnitTracker.AddEnemy(gameObject);
-    }
-
     void Start()
     {
         myInfo = GetComponent<UnitInfo>();
         weaponsController = GetComponent<WeaponsController>();
         myRigidbody = GetComponent<Rigidbody>();
 
-        target = UnitTracker.playerShip;
+        UnitTracker.AddUnit(gameObject);
+        target = UnitTracker.PlayerShip;
     }
 
     void Update()
@@ -41,7 +37,7 @@ public class AIController : MonoBehaviour
 
     void OnDisable()
     {
-        UnitTracker.RemoveEnemy(gameObject);
+        UnitTracker.RemoveUnit(gameObject);
     }
 
     void AdjustThrottle()

@@ -34,7 +34,7 @@ public class CollisionHandler : MonoBehaviour
     void HitUnit(GameObject otherUnit)
     {
         //If we are a projectile and hit the unit that created us: return.
-        if (GetComponent<ProjectileInfo>() != null && GetComponent<ProjectileInfo>().owner == otherUnit)
+        if (GetComponent<ProjectileInfo>() != null && GetComponent<ProjectileInfo>().Owner == otherUnit)
             return;
         
         //Determine damage to deal to other unit.

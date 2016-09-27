@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviour {
     void Awake()
     {
         instance = this;
-        UnitTracker.playerShip = gameObject;
     }
 
     void Start()
@@ -31,6 +30,7 @@ public class PlayerController : MonoBehaviour {
         weaponsController = GetComponent<WeaponsController>();
         myRigidbody = GetComponent<Rigidbody>();
 
+        UnitTracker.PlayerShip = gameObject;
         CursorController.ShowCursor(false); //This should be handled in game controller once set up.
         if (HUDController.Instance != null) HUDController.Instance.SetThrottleTextPercentage(throttlePercentage);
     }

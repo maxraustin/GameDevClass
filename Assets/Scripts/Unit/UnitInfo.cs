@@ -7,10 +7,16 @@ using System.Collections;
 public class UnitInfo : MonoBehaviour
 {
     [SerializeField]
+    int teamID;
+
+    [SerializeField]
     int maxHealth;
 
     [SerializeField]
     int maxShields;
+
+    [SerializeField]
+    float shieldRegenRate; //Rate in shields regenerated per second.
 
     [SerializeField]
     float maxSpeed;
@@ -74,5 +80,17 @@ public class UnitInfo : MonoBehaviour
     {
         get { return maxSpeed; }
         set { maxSpeed = value; }
+    }
+
+    public float ShieldRegenRate
+    {
+        get { return shieldRegenRate; }
+        set { shieldRegenRate = value; }
+    }
+
+    public int TeamID
+    {
+        get { return teamID; }
+        set { teamID = value; }
     }
 }

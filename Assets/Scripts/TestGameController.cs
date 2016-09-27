@@ -17,26 +17,40 @@ public class TestGameController : MonoBehaviour
         TimerController.Instance.StartCountdown(60);
     }
 
+    void OnEnable()
+    {
+        Health.OnPlayerDeath += Lose;
+        Health.OnUnitDeath += CheckForWin;
+        TimerController.OnTimerExpired += Lose;
+    }
+
+    void OnDisable()
+    {
+        Health.OnPlayerDeath -= Lose;
+        Health.OnUnitDeath -= CheckForWin;
+        TimerController.OnTimerExpired -= Lose;
+    }
+
     // Update is called once per frame
     void Update()
     {
         HUDController.Instance.SetObjectiveCount(UnitTracker.GetActiveEnemyCount());
-        if (UnitTracker.GetActiveEnemyCount() == 0 && UnitTracker.playerShip != null && TimerController.Instance.GetTime() > 0)
+    }
+
+    void CheckForWin()
+    {
+        Debug.Log("Checking for win");
+        if (UnitTracker.GetActiveEnemyCount() == 0 && UnitTracker.PlayerShip != null && TimerController.Instance.GetTime() > 0)
         {
             winText.SetActive(true);
         }
+    }
 
-        if (UnitTracker.playerShip == null)
-        {
-            loseText.SetActive(true);
-            StartCoroutine(Restart());
-        }
-
-        if (TimerController.Instance.GetTime() <= 0)
-        {
-            loseText.SetActive(true);
-            StartCoroutine(Restart());
-        }
+    void Lose()
+    {
+        Debug.Log("Lose");
+        loseText.SetActive(true);
+        StartCoroutine(Restart());
     }
 
     IEnumerator Restart()

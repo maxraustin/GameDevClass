@@ -12,7 +12,9 @@ public class ProjectileInfo : MonoBehaviour
     [SerializeField]
     float speed;
 
-    public GameObject owner { get; set; } //This should only be set at runtime by the projectile's actual owner.
+    //Owner and TeamID should only be set at runtime by the unit that created this projectile.
+    public GameObject Owner { get; set; } 
+    public int TeamID { get; set; }
 
     public int Damage
     {
