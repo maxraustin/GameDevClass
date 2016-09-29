@@ -7,8 +7,9 @@ using System.Collections;
 public class HUDController : MonoBehaviour {
     static HUDController instance;
 
-    GameObject hsDisplay, objectiveText, timerText, throttleText;
+    GameObject hsDisplay, messageText, objectiveText, timerText, throttleText;
     HealthAndShieldsDisplayController hsDisplayController;
+    MessageTextController messageTextController;
     ObjectiveTextController objectiveTextController;
     TimerTextController timerTextController;
     ThrottleTextController throttleTextController;
@@ -30,18 +31,21 @@ public class HUDController : MonoBehaviour {
         if (!hasInitialized)
         {
             hsDisplay = transform.Find("HealthAndShieldsDisplay").gameObject;
+            messageText = transform.Find("MessageText").gameObject;
             objectiveText = transform.Find("ObjectiveText").gameObject;
             timerText = transform.Find("TimerText").gameObject;
             throttleText = transform.Find("ThrottleText").gameObject;
 
             if (hsDisplay != null)
                 hsDisplayController = hsDisplay.GetComponent<HealthAndShieldsDisplayController>();
+            if (messageText != null)
+                messageTextController = messageText.GetComponent<MessageTextController>();
+            if (objectiveText != null)
+                objectiveTextController = objectiveText.GetComponent<ObjectiveTextController>();
             if (timerText != null)
                 timerTextController = timerText.GetComponent<TimerTextController>();
             if (throttleText != null)
                 throttleTextController = throttleText.GetComponent<ThrottleTextController>();
-            if (objectiveText != null)
-                objectiveTextController = objectiveText.GetComponent<ObjectiveTextController>();
 
             hasInitialized = true;
         }
@@ -51,6 +55,24 @@ public class HUDController : MonoBehaviour {
     /// Property to get the current HUDController instance.
     /// </summary>
     public static HUDController Instance { get { return instance; } }
+
+    public void DisplayMessage(string message)
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        if (messageTextController != null)
+            messageTextController.DisplayMessage(message);
+    }
+
+    public void DisplayMessage(string message, float timeToDisplay)
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        if (messageTextController != null)
+            messageTextController.DisplayMessage(message, timeToDisplay);
+    }
 
     public void SetHealth(int currentHP, int maxHP)
     {

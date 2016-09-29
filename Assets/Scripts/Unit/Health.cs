@@ -91,9 +91,10 @@ public class Health : MonoBehaviour
         //If this unit is not the player: Remove it from the unitTracker and raise the OnUnitDeath event.
         if (!myInfo.IsPlayerShip) {
             UnitTracker.RemoveUnit(gameObject);
-            try { 
-            if (OnUnitDeath != null)
-                OnUnitDeath();
+            try
+            {
+                if (OnUnitDeath != null)
+                    OnUnitDeath();
             }
             catch (System.Exception ex)
             {
