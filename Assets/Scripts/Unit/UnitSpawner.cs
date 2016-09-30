@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Provides methods to spawn units in the scene.
@@ -46,49 +47,50 @@ public class UnitSpawner : MonoBehaviour {
         UnitTracker.AddUnit(unit);
         return unit;
     }
-
-    /*
-    /// <summary>
-    /// Spawns an EnemyFighter1 at given location looking at the player ship.
-    /// </summary>
-    /// <param name="spawnLocation">Location to spawn the unit.</param>
-    /// <returns>Reference to the spawned unit.</returns>
-    public static GameObject SpawnEnemyFighter1(Vector3 spawnLocation)
+    
+    public static List<GameObject> SpawnUnitsInArea(GameObject unitType, int spawnCount, GameObject spawnBox)
     {
-        return SpawnEnemyFighter1(spawnLocation, RotationCalculator.RotationTowardPlayerShip(spawnLocation));
+        if (spawnBox.GetComponent<BoxCollider>() == null)
+            throw new MissingComponentException(spawnBox.name + " is missing a BoxCollider component.");
+
+        BoxCollider spawnCollider = spawnBox.GetComponent<BoxCollider>();
+        List<GameObject> spawnedUnits = new List<GameObject>();
+        for (int i = 0; i < spawnCount; i++)
+        {
+            Vector3 spawnLocation = Vector3.zero;
+            int attemptsToFindPosition = 0;
+            while (!spawnCollider.bounds.Contains(spawnLocation) || PositionInsideAnyUnitCollider(spawnLocation))
+            {
+                attemptsToFindPosition++;
+                spawnLocation = new Vector3(spawnBox.transform.position.x + Random.Range(-spawnBox.transform.localScale.x / 2, spawnBox.transform.localScale.x / 2), spawnBox.transform.position.y + Random.Range(-spawnBox.transform.localScale.y / 2, spawnBox.transform.localScale.y / 2), spawnBox.transform.position.z + Random.Range(-spawnBox.transform.localScale.z / 2, spawnBox.transform.localScale.z / 2));
+
+                if (attemptsToFindPosition > 100)
+                {
+                    Debug.LogError("The spawnBox must be too small, can not spawn every unit without colliding with another unit.");
+                    return spawnedUnits;
+                }
+            }
+            spawnedUnits.Add(SpawnUnit(unitType, spawnLocation));
+        }
+
+        return spawnedUnits;
     }
 
-    /// <summary>
-    /// Spawns an EnemyFighter1 at given location with given rotation.
-    /// </summary>
-    /// <param name="spawnLocation">Location to spawn the unit.</param>
-    /// <returns>Reference to the spawned unit.</returns>
-    public static GameObject SpawnEnemyFighter1(Vector3 spawnLocation, Quaternion spawnRotation)
+    static bool PositionInsideAnyUnitCollider(Vector3 position)
     {
-        return Instantiate(UnitReferences.EnemyFighter1, spawnLocation, spawnRotation) as GameObject;
+        List<GameObject> units = UnitTracker.GetAllActiveUnits();
+
+        foreach (GameObject go in units)
+        {
+            MeshCollider mc = go.GetComponent<MeshCollider>();
+            if (mc == null)
+                continue;
+
+            if (mc.bounds.Contains(position))
+            {
+                return true;
+            }
+        }
+        return false;
     }
-
-    /// <summary>
-    /// Spawns a PlayerFighter1 at given location looking at the position (0,0,0).
-    /// </summary>
-    /// <param name="spawnLocation">Location to spawn the unit.</param>
-    /// <returns>Reference to the spawned unit.</returns>
-    public static GameObject SpawnPlayerFighter1(Vector3 spawnLocation)
-    {
-        return SpawnPlayerFighter1(spawnLocation, RotationCalculator.RotationTowardZero(spawnLocation));
-    }
-
-    /// <summary>
-    /// Spawns a PlayerFighter1 at given location with given rotation.
-    /// </summary>
-    /// <param name="spawnLocation">Location to spawn the unit.</param>
-    /// <returns>Reference to the spawned unit.</returns>
-    public static GameObject SpawnPlayerFighter1(Vector3 spawnLocation, Quaternion spawnRotation)
-    {
-        if (UnitTracker.PlayerShip != null)
-            throw new System.Exception("A player ship already exists in this scene and you are trying to instantiate another player ship.");
-
-        return Instantiate(UnitReferences.PlayerFighter1, spawnLocation, spawnRotation) as GameObject;
-    }   
-    */
 }

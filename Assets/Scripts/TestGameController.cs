@@ -6,6 +6,12 @@ public class TestGameController : MonoBehaviour
     [SerializeField]
     GameObject startBoundary;
 
+    [SerializeField]
+    GameObject spawn1;
+
+    [SerializeField]
+    GameObject spawn2;
+
     int currentProgressionPoint = 0;
 
     // Use this for initialization
@@ -97,12 +103,9 @@ public class TestGameController : MonoBehaviour
 
     IEnumerator SpawnShips1()
     {
-        for (int i = 0; i < 6; i++) { 
-            for (int j = 0; j < 4; j++)
-            {
-                Vector3 spawnLocation = new Vector3(Random.Range(-75, 75), Random.Range(50, 150), 200);
-                UnitSpawner.SpawnUnit(UnitReferences.EnemyFighter1, spawnLocation);
-            }
+        for (int i = 0; i < 6; i++) {
+            UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 3, spawn1);
+            UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 3, spawn2);
             yield return new WaitForSeconds(10);
         }
         AdvanceLevelProgression();
