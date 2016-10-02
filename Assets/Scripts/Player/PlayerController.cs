@@ -9,9 +9,6 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     ControlType controlType = ControlType.Mouse;
 
-    [SerializeField]
-    GameObject reticule; //This is a terrible way to implement a targetting reticule but it was fast, should reimplement.
-
     UnitInfo myInfo;
     WeaponsController weaponsController;
     Rigidbody myRigidbody;
@@ -38,7 +35,6 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         Vector3 reticuleLocation = transform.position + (transform.forward * 50);
-        reticule.transform.position = reticuleLocation;
 
         if (Input.GetButton("Fire1"))
             weaponsController.FirePrimaryWeapon();
