@@ -4,7 +4,7 @@ using System.Collections;
 public class CrosshairController : MonoBehaviour {
 
     public Texture2D texture;
-    public float scale = 1;
+    public float scale = 0.5f;
 
     // Use this for initialization
     void Start() {
