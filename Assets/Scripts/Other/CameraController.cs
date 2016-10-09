@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
+    const float MAX_Z = -25;
+    const float MIN_Z = -15;
+
     [SerializeField]
     bool isOverviewCamera;
 
@@ -10,6 +13,8 @@ public class CameraController : MonoBehaviour {
 
     static Camera overviewCamera;
     static CameraController playerCameraControllerInstance;
+
+    PlayerController parentPlayerController;
 
     void Awake()
     {
@@ -25,6 +30,8 @@ public class CameraController : MonoBehaviour {
 
         if (isOverviewCamera && isPlayerCamera)
             throw new System.Exception("Camera can not be set as both overview camera and player camera.");
+
+        parentPlayerController = GetComponentInParent<PlayerController>();
     }
 
 	// Use this for initialization
@@ -42,6 +49,16 @@ public class CameraController : MonoBehaviour {
             overviewCamera.enabled = true;
     }
 
+    void Update() {
+        Debug.Log(GetComponentInParent<PlayerController>());
+        if (parentPlayerController != null) {
+            float z_offset = ((((float)(parentPlayerController.throttlePercentage - PlayerController.MIN_THROTTLE_PERCENT) /
+                (float)(PlayerController.MAX_THROTTLE_PERCENT - PlayerController.MIN_THROTTLE_PERCENT))) *
+                (MAX_Z - MIN_Z)) + MIN_Z;
+            transform.localPosition = new Vector3(0, 10, z_offset);
+        }
+    }
+   
     /// <summary>
     /// Property to get the current CameraController instance for the player camera.
     /// </summary>
