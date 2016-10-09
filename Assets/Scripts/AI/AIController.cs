@@ -19,7 +19,6 @@ public class AIController : MonoBehaviour
         weaponsController = GetComponent<WeaponsController>();
         myRigidbody = GetComponent<Rigidbody>();
 
-        UnitTracker.AddUnit(gameObject);
         target = UnitTracker.PlayerShip;
     }
 

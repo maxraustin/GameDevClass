@@ -89,6 +89,20 @@ public class UnitTracker : MonoBehaviour
         return enemies;
     }
 
+    public static List<GameObject> GetAllActiveUnits()
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        //Remove any null objects from the list.
+        activeUnits.RemoveAll(unit => unit == null);
+
+        if (playerShip != null)
+            activeUnits.Add(playerShip);
+
+        return activeUnits;
+    }
+
     public static void RemoveUnit(GameObject unit)
     {
         if (!hasInitialized)
