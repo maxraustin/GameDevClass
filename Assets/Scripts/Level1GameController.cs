@@ -27,7 +27,7 @@ public class Level1GameController : MonoBehaviour {
     void OnEnable()
     {
         Health.OnPlayerDeath += Lose;
-        Health.OnUnitDeath += CheckForWin;
+        Health.OnUnitDeath += EnemyDeath;
         BoundaryController.OnPlayerEnterBoundary += PlayerEnteredBoundary;
         BoundaryController.OnPlayerExitBoundary += PlayerLeftBoundary;
     }
@@ -35,7 +35,7 @@ public class Level1GameController : MonoBehaviour {
     void OnDisable()
     {
         Health.OnPlayerDeath -= Lose;
-        Health.OnUnitDeath -= CheckForWin;
+        Health.OnUnitDeath -= EnemyDeath;
         BoundaryController.OnPlayerEnterBoundary -= PlayerEnteredBoundary;
         BoundaryController.OnPlayerExitBoundary -= PlayerLeftBoundary;
     }
@@ -52,11 +52,15 @@ public class Level1GameController : MonoBehaviour {
 
         switch (currentProgressionPoint)
         {
-            case 1:
-                StartCoroutine(SpawnShips1());
-                break;
+            case 1:              
             case 2:
-                CheckForWin();
+            case 3:
+            case 4:
+            case 5:
+                SpawnShips();
+                break;
+            case 6:
+                EnemyDeath();
                 break;
             default:
                 Debug.Log("Advanced to a progression point beyond my scope.");
@@ -66,11 +70,11 @@ public class Level1GameController : MonoBehaviour {
 
     }
 
-    void CheckForWin()
+    void EnemyDeath()
     {
-        if (UnitTracker.GetActiveEnemyCount() == 0 && UnitTracker.PlayerShip != null && TimerController.Instance.GetTime() > 0 && currentProgressionPoint == 2)
+        if (UnitTracker.GetActiveEnemyCount() == 0)
         {
-            HUDController.Instance.DisplayMessage("You win.");
+            AdvanceLevelProgression();
         }
     }
 
@@ -108,7 +112,7 @@ public class Level1GameController : MonoBehaviour {
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 
-    IEnumerator SpawnShips1()
+    /*IEnumerator SpawnShips1()
     {
         for (int i = 0; i < 5; i++)
         {
@@ -118,5 +122,12 @@ public class Level1GameController : MonoBehaviour {
             yield return new WaitForSeconds(15);
         }
         AdvanceLevelProgression();
+    }*/
+
+    void SpawnShips()
+    {
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn1);
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn2);
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn3);
     }
 }
