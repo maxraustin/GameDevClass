@@ -8,8 +8,7 @@ public class CollisionHandler : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag.Equals("Projectile"))
-            return;
+        if (other.tag.Equals("Projectile")) return;
         else if (other.tag.Equals("Immovable"))
             HitImmovableObject();
         else if (other.tag.Equals("Unit"))
@@ -33,6 +32,20 @@ public class CollisionHandler : MonoBehaviour
     /// <param name="otherUnit">The unit we hit.</param>
     void HitUnit(GameObject otherUnit)
     {
+        // if otherUnit name == kingAI destroy yourself -- you don't stand a chance
+        // ToDo create forcefield for the kingAI that must be taken down first
+        if (otherUnit.name == "kingAI")
+        {       
+            // instantiate explosion at collision location
+            GameObject explosion = Instantiate(Resources.Load("Explosions/explosion_boss"), transform.position, transform.rotation) as GameObject;
+
+            // destroy gameObject
+            Destroy(gameObject, 0);
+
+            // clean up explosion
+            Destroy(explosion, 5);
+        }
+
         //If we are a projectile and hit the unit that created us: return.
         if (GetComponent<ProjectileInfo>() != null && GetComponent<ProjectileInfo>().Owner == otherUnit)
             return;
