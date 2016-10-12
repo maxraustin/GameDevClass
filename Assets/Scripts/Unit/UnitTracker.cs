@@ -110,4 +110,15 @@ public class UnitTracker : MonoBehaviour
 
         activeUnits.Remove(unit);
     }
+
+    public static List<GameObject> GetTeam(int teamId)
+    {
+        List<GameObject> team = new List<GameObject>();
+        foreach (GameObject go in activeUnits)
+        {
+            if (go != null && go.GetComponent<UnitInfo>() != null && go.GetComponent<UnitInfo>().TeamID == teamId)
+                team.Add(go);
+        }
+        return team;
+    }
 }

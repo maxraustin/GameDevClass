@@ -50,6 +50,7 @@ public class WeaponsController: MonoBehaviour
         {
             //Create projectile.
             GameObject projectile = Instantiate(primaryWeapon, tf.position, tf.rotation) as GameObject;
+            projectile.layer = 8;
             //Set projectile's owner and teamID.
             if (projectile.GetComponent<ProjectileInfo>() != null)
             {
