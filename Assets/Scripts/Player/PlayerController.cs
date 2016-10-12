@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour {
 
             float vertAccel = Math.Abs(mousePos.y) > mouseSensitivity ? (mousePos.y < 0 ? -1 : 1) * 1.0f : mousePos.y / mouseSensitivity;
             float horizAccel = Math.Abs(mousePos.x) > mouseSensitivity ? (mousePos.x < 0 ? -1 : 1) * 1.0f : mousePos.x / mouseSensitivity;
-            transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel, horizAccel, -keyboardInputHorizontal));
+            transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel, horizAccel/4, -keyboardInputHorizontal));
         }
     }
 

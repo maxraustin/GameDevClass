@@ -48,7 +48,6 @@ public class RadarController : MonoBehaviour {
 			Vector3 playerRotation = playerObj.transform.eulerAngles;
 			//Rotate our radar with the player ship, but only on one axis
 			transform.eulerAngles = new Vector3 (transform.rotation.x, transform.rotation.y, -playerRotation.y);
-			Debug.Log (enemies.Count.ToString());
 		}
 	}
 }

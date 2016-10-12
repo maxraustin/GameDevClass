@@ -50,7 +50,6 @@ public class CameraController : MonoBehaviour {
     }
 
     void Update() {
-        Debug.Log(GetComponentInParent<PlayerController>());
         if (parentPlayerController != null) {
             float z_offset = ((((float)(parentPlayerController.throttlePercentage - PlayerController.MIN_THROTTLE_PERCENT) /
                 (float)(PlayerController.MAX_THROTTLE_PERCENT - PlayerController.MIN_THROTTLE_PERCENT))) *
