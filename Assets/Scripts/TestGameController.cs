@@ -7,6 +7,9 @@ public class TestGameController : MonoBehaviour
     GameObject startBoundary;
 
     [SerializeField]
+    GameObject playerSpawn;
+
+    [SerializeField]
     GameObject spawn1;
 
     [SerializeField]
@@ -19,6 +22,8 @@ public class TestGameController : MonoBehaviour
     {
         if (Time.timeScale != 1)
             Time.timeScale = 1;
+
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.PlayerFighter1, 1, playerSpawn);
     }
 
     void OnEnable()

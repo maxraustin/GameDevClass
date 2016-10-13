@@ -49,7 +49,11 @@ public class CollisionHandler : MonoBehaviour
         //If we are a projectile and hit the unit that created us: return.
         if (GetComponent<ProjectileInfo>() != null && GetComponent<ProjectileInfo>().Owner == otherUnit)
             return;
-        
+
+        //If we are a projectile and hit a unit on our team: return. (No friendly fire, may change later.)
+        if (GetComponent<ProjectileInfo>() != null && otherUnit.GetComponent<UnitInfo>() != null && GetComponent<ProjectileInfo>().TeamID == otherUnit.GetComponent<UnitInfo>().TeamID)
+            return;
+
         //Determine damage to deal to other unit.
         int damageToDeal = 0;
         if (tag.Equals("Projectile") && GetComponent<ProjectileInfo>() != null) //If we are a projectile: deal our projetile damage.

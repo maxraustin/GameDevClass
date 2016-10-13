@@ -56,6 +56,14 @@ public class MenuController : MonoBehaviour
     }
 
     /// <summary>
+    /// Loads main menu scene. (Called when the Return to Menu button in the menu is clicked.)
+    /// </summary>
+    public void Button_ReturnToMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
+    /// <summary>
     /// 
     /// </summary>
     public void HideMenu()

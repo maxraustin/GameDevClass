@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-enum ControlType { Legacy, Mouse };
+public enum ControlType { Legacy, Mouse };
 public class PlayerController : MonoBehaviour {
     static PlayerController instance;
     public const int MAX_THROTTLE_PERCENT = 100;
@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviour {
         weaponsController = GetComponent<WeaponsController>();
         myRigidbody = GetComponent<Rigidbody>();
 
-        UnitTracker.PlayerShip = gameObject;
         CursorController.ShowCursor(true); //This should be handled in game controller once set up.
         if (HUDController.Instance != null) HUDController.Instance.SetThrottleTextPercentage(throttlePercentage);
 
@@ -43,6 +42,8 @@ public class PlayerController : MonoBehaviour {
     void Update() {
         if (Input.GetButton("Fire1"))
             weaponsController.FirePrimaryWeapon();
+        if (Input.GetButton("Fire2"))
+            weaponsController.FireSecondaryWeapon();
     }
 
     void FixedUpdate() {
@@ -89,7 +90,8 @@ public class PlayerController : MonoBehaviour {
 
             float vertAccel = Math.Abs(mousePos.y) > mouseSensitivity ? (mousePos.y < 0 ? -1 : 1) * 1.0f : mousePos.y / mouseSensitivity;
             float horizAccel = Math.Abs(mousePos.x) > mouseSensitivity ? (mousePos.x < 0 ? -1 : 1) * 1.0f : mousePos.x / mouseSensitivity;
-            transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel, horizAccel/4, -keyboardInputHorizontal));
+            transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel, keyboardInputHorizontal / 4, -horizAccel));
+            //transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel, horizAccel/4, -keyboardInputHorizontal));
         }
     }
 

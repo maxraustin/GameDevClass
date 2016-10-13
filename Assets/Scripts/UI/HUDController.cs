@@ -7,12 +7,13 @@ using System.Collections;
 public class HUDController : MonoBehaviour {
     static HUDController instance;
 
-    GameObject hsDisplay, messageText, objectiveText, timerText, throttleText;
+    GameObject hsDisplay, messageText, objectiveText, timerText, throttleText, weaponDisplay;
     HealthAndShieldsDisplayController hsDisplayController;
     MessageTextController messageTextController;
     ObjectiveTextController objectiveTextController;
     TimerTextController timerTextController;
     ThrottleTextController throttleTextController;
+    WeaponDisplayController weaponDisplayController;
 
     bool hasInitialized = false;
 
@@ -35,6 +36,7 @@ public class HUDController : MonoBehaviour {
             objectiveText = transform.Find("ObjectiveText").gameObject;
             timerText = transform.Find("TimerText").gameObject;
             throttleText = transform.Find("ThrottleText").gameObject;
+            weaponDisplay = transform.Find("WeaponDisplay").gameObject;
 
             if (hsDisplay != null)
                 hsDisplayController = hsDisplay.GetComponent<HealthAndShieldsDisplayController>();
@@ -46,6 +48,8 @@ public class HUDController : MonoBehaviour {
                 timerTextController = timerText.GetComponent<TimerTextController>();
             if (throttleText != null)
                 throttleTextController = throttleText.GetComponent<ThrottleTextController>();
+            if (weaponDisplay != null)
+                weaponDisplayController = weaponDisplay.GetComponent<WeaponDisplayController>();
 
             hasInitialized = true;
         }
@@ -144,6 +148,54 @@ public class HUDController : MonoBehaviour {
 
         if (throttleTextController != null)
             throttleTextController.UpdateThrottleRate(throttlePercentage);
+    }
+
+    public void SetWeaponsCount(int weaponNum, int count)
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        if (weaponDisplayController != null)
+        {
+            if (weaponNum == 1)
+                weaponDisplayController.SetPrimaryWeaponCount(count);
+            else if (weaponNum == 2)
+                weaponDisplayController.SetSecondaryWeaponCount(count);
+            else if (weaponNum == 3)
+                weaponDisplayController.SetTertiaryWeaponCount(count);
+        }
+    }
+
+    public void SetWeaponsCount(int weaponNum, bool isInfinite)
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        if (weaponDisplayController != null)
+        {
+            if (weaponNum == 1)
+                weaponDisplayController.SetPrimaryWeaponCount(isInfinite);
+            else if (weaponNum == 2)
+                weaponDisplayController.SetSecondaryWeaponCount(isInfinite);
+            else if (weaponNum == 3)
+                weaponDisplayController.SetTertiaryWeaponCount(isInfinite);
+        }
+    }
+
+    public void SetWeaponsEnabled(int weaponNum, bool isEnabled)
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        if (weaponDisplayController != null)
+        {
+            if (weaponNum == 1)
+                weaponDisplayController.SetPrimaryWeaponEnabled(isEnabled);
+            else if (weaponNum == 2)
+                weaponDisplayController.SetSecondaryWeaponEnabled(isEnabled);
+            else if (weaponNum == 3)
+                weaponDisplayController.SetTertiaryWeaponEnabled(isEnabled);
+        }
     }
 
     public void ShowHealthAndShieldsDisplay(bool show)

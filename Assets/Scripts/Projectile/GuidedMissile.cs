@@ -24,10 +24,12 @@ public class GuidedMissile : MonoBehaviour {
         speed = GetComponent<ProjectileInfo>().Speed;
 
         // if target not specified assume you are targeting PlayerFighter1
-        if (targetObject == null) targetObject = GameObject.Find("PlayerFighter1");
+        //if (targetObject == null) targetObject = GameObject.Find("PlayerFighter1");
 
         // target the targetObject cords
-        target = targetObject.transform.position;
+        //target = targetObject.transform.position;
+
+        if (targetObject == null) AcquireTarget();
     }
 
     // called once every second
@@ -42,11 +44,30 @@ public class GuidedMissile : MonoBehaviour {
             destroy = true;
         }
 
-        // find the distance from missile to target
-        calculatedDistance = Vector3.Distance(gameObject.transform.position, target);
+        // if die then create explosion, destroy object, cleanup explosion
+        if (destroy == true)
+        {
+            // instantiate explosion at collision location
+            GameObject explosion = Instantiate(Resources.Load("Explosions/hit_sparks"), transform.position, transform.rotation) as GameObject;
+
+            // destroy gameObject
+            Destroy(gameObject, 0);
+
+            // clean up explosion
+            Destroy(explosion, 3);
+        }
 
         // give the missile speed
         transform.Translate(0, 0, speed / 100);
+
+        if (target == null || targetObject == null)
+        {
+            AcquireTarget();
+            return;
+        }
+
+        // find the distance from missile to target
+        calculatedDistance = Vector3.Distance(gameObject.transform.position, target);
 
         // delay tracking for a certain amount of time if provided...
         if (timer > timeTillTrack)
@@ -69,17 +90,30 @@ public class GuidedMissile : MonoBehaviour {
             stopTurning = true;    
         }
 
-        // if die then create explosion, destroy object, cleanup explosion
-        if (destroy == true)
-        {
-            // instantiate explosion at collision location
-            GameObject explosion = Instantiate(Resources.Load("Explosions/hit_sparks"), transform.position, transform.rotation) as GameObject;
-            
-            // destroy gameObject
-            Destroy(gameObject, 0);
+    }
 
-            // clean up explosion
-            Destroy(explosion, 3);
+
+    void AcquireTarget()
+    {
+        if (targetObject == null || target == null)
+        {
+            GameObject closestEnemy = null;
+            foreach (GameObject go in UnitTracker.GetActiveEnemies(gameObject))
+            {
+                if (closestEnemy == null)
+                {
+                    closestEnemy = go;
+                    continue;
+                }
+
+                if ((go.transform.position - transform.position).magnitude < (closestEnemy.transform.position - transform.position).magnitude)
+                    closestEnemy = go;
+            }
+
+            targetObject = closestEnemy;
+
+            if (targetObject != null)
+                target = targetObject.transform.position;
         }
     }
 

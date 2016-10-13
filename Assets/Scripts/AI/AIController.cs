@@ -89,7 +89,7 @@ public class AIController : MonoBehaviour
         GameObject closestTarget = null;
 
         // find the enemy that is closest
-        foreach (GameObject enemy in UnitTracker.GetTeam(myInfo.TeamID == 1 ? 0 : 1))
+        foreach (GameObject enemy in UnitTracker.GetActiveEnemies(myInfo.TeamID)/*UnitTracker.GetTeam(myInfo.TeamID == 1 ? 0 : 1)*/)
         {
             if ((closestTarget == null) ||
                 (Vector3.Distance(enemy.transform.position, this.transform.position)
