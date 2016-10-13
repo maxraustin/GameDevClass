@@ -30,7 +30,12 @@ public class UnitSpawner : MonoBehaviour {
             lookRotation = RotationCalculator.RotationTowardPlayerShip(spawnLocation);
             
         GameObject unit = Instantiate(unitType, spawnLocation, lookRotation) as GameObject;
-        UnitTracker.AddUnit(unit);
+
+        if (unit.GetComponent<UnitInfo>() != null && unit.GetComponent<UnitInfo>().IsPlayerShip)
+            UnitTracker.PlayerShip = unit;
+        else
+            UnitTracker.AddUnit(unit);
+
         return unit;
     }
 
@@ -44,7 +49,12 @@ public class UnitSpawner : MonoBehaviour {
             throw new System.Exception("A player ship already exists in this scene and you are trying to instantiate another player ship.");
 
         GameObject unit = Instantiate(unitType, spawnLocation, spawnRotation) as GameObject;
-        UnitTracker.AddUnit(unit);
+
+        if (unit.GetComponent<UnitInfo>() != null && unit.GetComponent<UnitInfo>().IsPlayerShip)
+            UnitTracker.PlayerShip = unit;
+        else
+            UnitTracker.AddUnit(unit);
+
         return unit;
     }
     
@@ -78,7 +88,7 @@ public class UnitSpawner : MonoBehaviour {
 
     static bool PositionInsideAnyUnitCollider(Vector3 position)
     {
-        List<GameObject> units = UnitTracker.GetAllActiveUnits();
+        List<GameObject> units = UnitTracker.GetActiveUnits();
 
         foreach (GameObject go in units)
         {

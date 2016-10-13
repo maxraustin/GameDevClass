@@ -57,10 +57,10 @@ public class Health : MonoBehaviour
 
     void AdjustHPDisplay()
     {
-        if (myInfo.IsPlayerShip)
+        if (myInfo.IsPlayerShip && HUDController.Instance != null)
         {
-            if (HUDController.Instance != null) HUDController.Instance.SetHealth(currentHealth, myInfo.MaxHealth);
-            if (HUDController.Instance != null) HUDController.Instance.SetShields(currentShields, myInfo.MaxShields);
+            HUDController.Instance.SetHealth(currentHealth, myInfo.MaxHealth);
+            HUDController.Instance.SetShields(currentShields, myInfo.MaxShields);
         }
     }
 

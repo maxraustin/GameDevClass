@@ -22,37 +22,10 @@ public class UnitInfo : MonoBehaviour
     float maxSpeed;
 
     [SerializeField]
-    float cooldownPrimary;
-
-    [SerializeField]
-    float cooldownSecondary;
-
-    [SerializeField]
-    float cooldownTertiary;
-
-    [SerializeField]
     GameObject explosion;
 
     [SerializeField]
     bool isPlayerShip;
-
-    public float CooldownPrimary
-    {
-        get { return cooldownPrimary; }
-        set { cooldownPrimary = value; }
-    }
-
-    public float CooldownSecondary
-    {
-        get { return cooldownSecondary; }
-        set { cooldownSecondary = value; }
-    }
-
-    public float CooldownTertiary
-    {
-        get { return cooldownTertiary; }
-        set { cooldownTertiary = value; }
-    }
 
     public GameObject Explosion
     {

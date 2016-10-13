@@ -7,21 +7,34 @@ public class Level1GameController : MonoBehaviour {
     GameObject startBoundary;
 
     [SerializeField]
-    GameObject spawn1;
+    GameObject playerSpawn;
 
     [SerializeField]
-    GameObject spawn2;
+    GameObject enemySpawn1;
 
     [SerializeField]
-    GameObject spawn3;
+    GameObject enemySpawn2;
+
+    [SerializeField]
+    GameObject enemySpawn3;
+
+    [SerializeField]
+    GameObject alliedSpawn1;
 
     int currentProgressionPoint = 0;
+
+    void Awake()
+    {
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.PlayerFighter1, 1, playerSpawn);
+    }
 
     // Use this for initialization
     void Start()
     {
         if (Time.timeScale != 1)
             Time.timeScale = 1;
+
+        HUDController.Instance.SetObjectiveTextType(ObjectiveTextType.NEUTRALIZE_WAVES);
     }
 
     void OnEnable()
@@ -40,27 +53,24 @@ public class Level1GameController : MonoBehaviour {
         BoundaryController.OnPlayerExitBoundary -= PlayerLeftBoundary;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        HUDController.Instance.SetObjectiveCount(UnitTracker.GetActiveEnemyCount());
-    }
-
     void AdvanceLevelProgression()
     {
         currentProgressionPoint++;
-
+        HUDController.Instance.SetObjectiveCount(6 - currentProgressionPoint);
         switch (currentProgressionPoint)
         {
-            case 1:              
+            case 1:
+                SpawnAlliedShips();
+                SpawnEnemyShips();
+                break;
             case 2:
             case 3:
             case 4:
             case 5:
-                SpawnShips();
+                SpawnEnemyShips();
                 break;
             case 6:
-                EnemyDeath();
+                Victory();
                 break;
             default:
                 Debug.Log("Advanced to a progression point beyond my scope.");
@@ -80,20 +90,20 @@ public class Level1GameController : MonoBehaviour {
 
     void Lose()
     {
-        HUDController.Instance.DisplayMessage("You lose.");
-        //StartCoroutine(Restart());
+        HUDController.Instance.DisplayMessage("You failed.");
+        StartCoroutine(Restart());
     }
 
     void PlayerEnteredBoundary(GameObject boundary)
     {
         if (currentProgressionPoint == 0 && boundary == startBoundary)
         {
-            HUDController.Instance.DisplayMessage("Kill all units before they kill you");
+            HUDController.Instance.DisplayMessage("Objective: Destroy all enemy waves.");
             AdvanceLevelProgression();
         }
         else
         {
-            HUDController.Instance.DisplayMessage("Thanks for returning");
+            HUDController.Instance.DisplayMessage("You have re-entered the mission area.", 2.0f);
         }
     }
 
@@ -101,7 +111,7 @@ public class Level1GameController : MonoBehaviour {
     {
         if (boundary == startBoundary)
         {
-            HUDController.Instance.DisplayMessage("Return to mission area or your ship go boom boom");
+            HUDController.Instance.DisplayMessage("Return to the mission area!", 2.0f);
         }
     }
 
@@ -112,22 +122,20 @@ public class Level1GameController : MonoBehaviour {
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 
-    /*IEnumerator SpawnShips1()
+    void SpawnAlliedShips()
     {
-        for (int i = 0; i < 5; i++)
-        {
-            UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn1);
-            UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn2);
-            UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn3);
-            yield return new WaitForSeconds(15);
-        }
-        AdvanceLevelProgression();
-    }*/
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.AlliedFighter1, 3, alliedSpawn1);
+    }
 
-    void SpawnShips()
+    void SpawnEnemyShips()
     {
-        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn1);
-        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn2);
-        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 1, spawn3);
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 10, enemySpawn1);
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 10, enemySpawn2);
+        UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1, 10, enemySpawn3);
+    }
+
+    void Victory()
+    {
+        HUDController.Instance.DisplayMessage("Congratulations, you have completed the level!");
     }
 }

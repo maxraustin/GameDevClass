@@ -89,6 +89,9 @@ public class GameMasterScripts : MonoBehaviour {
 		case 0:
 			SceneManager.LoadScene ("TestAaron");
 			break;
+		case 1:
+			SceneManager.LoadScene ("Level1");
+			break;
 		}
 	}
 

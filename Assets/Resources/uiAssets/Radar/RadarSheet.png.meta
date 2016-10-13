@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8fc7bbfd43aa03a43b76d86bd7863856
-timeCreated: 1475635411
+timeCreated: 1476343227
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -12,6 +12,7 @@ TextureImporter:
     21300010: RadarSheet_5
     21300012: RadarSheet_6
     21300014: RadarSheet_7
+    21300016: RadarSheet_8
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -158,6 +159,19 @@ TextureImporter:
         x: 625
         y: 575
         width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: RadarSheet_8
+      rect:
+        serializedVersion: 2
+        x: 650
+        y: 575
+        width: 23
         height: 25
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
