@@ -33,26 +33,40 @@ public class SaveController : MonoBehaviour {
     }
 
     /// <summary>
-    /// Writes UserSettings.ControlType to file.
+    /// Takes a SaveInfoMember. Saves corresponding Game/User setting to file.
     /// </summary>
-    public static void SaveControlType()
+    /// <param name="members">The type of settings to save.</param>
+    public static void SaveSetting(SIMember member)
     {
         SaveInfo saveInfo = LoadController.LoadSavedInfo();
 
-        saveInfo.controlType = UserSettings.ControlType;
+        if (member == SIMember.CONTROL_TYPE)
+            saveInfo.controlType = UserSettings.ControlType;
+        else if (member == SIMember.CURRENT_LEVEL)
+            saveInfo.currentLevel = GameSettings.CurrentLevel;
+        else if (member == SIMember.CURRENT_PLAYER_SHIP)
+            saveInfo.currentPlayerShip = GameSettings.CurrentPlayerShip;        
 
         WriteToFile(saveInfo);
     }
 
-
     /// <summary>
-    /// Writes GameSettings.CurrentLevel to file.
+    /// Takes an array of SaveInfoMembers. Saves all corresponding Game and User settings to file.
     /// </summary>
-    public static void SaveCurrentLevel()
+    /// <param name="members">The type of settings to save.</param>
+    public static void SaveSettings(SIMember[] members)
     {
         SaveInfo saveInfo = LoadController.LoadSavedInfo();
 
-        saveInfo.currentLevel = GameSettings.CurrentLevel;
+        foreach (SIMember member in members)
+        {
+            if (member == SIMember.CONTROL_TYPE)
+                saveInfo.controlType = UserSettings.ControlType;
+            else if (member == SIMember.CURRENT_LEVEL)
+                saveInfo.currentLevel = GameSettings.CurrentLevel;
+            else if (member == SIMember.CURRENT_PLAYER_SHIP)
+                saveInfo.currentPlayerShip = GameSettings.CurrentPlayerShip;
+        }
 
         WriteToFile(saveInfo);
     }

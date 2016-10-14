@@ -11,6 +11,7 @@ public class SaveInfo {
     
     //Game Settings
     public int currentLevel = DefaultSettings.GS_CURRENT_LEVEL;
+    public GameObject currentPlayerShip = DefaultSettings.GS_CURRENT_PSHIP;
 
     //User Settings
     public ControlType controlType = DefaultSettings.US_CONTROL_TYPE;

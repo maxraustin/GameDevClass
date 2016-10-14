@@ -43,7 +43,7 @@ public class GameMasterScripts : MonoBehaviour {
         else
             UserSettings.ControlType = ControlType.MouseAim;
 
-        SaveController.SaveControlType();
+        SaveController.SaveSetting(SIMember.CONTROL_TYPE);
     }
 	/// <summary>
 	/// Call this when navigating menus. It takes an int, which tells it which menu to pick
