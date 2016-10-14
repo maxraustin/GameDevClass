@@ -5,7 +5,7 @@ public class GuidedMissile : MonoBehaviour {
     // local vars
     public int lookSpeed = 5;
     public float timeTillTrack = 0;
-    public float distanceTillStopLooking = 250;
+    public float distanceTillStopLooking = 1000;
     public int timeTillExpire = 30;
 
     private float speed;
@@ -60,7 +60,7 @@ public class GuidedMissile : MonoBehaviour {
         // give the missile speed
         transform.Translate(0, 0, speed / 100);
 
-        if (target == null || targetObject == null)
+        if (targetObject == null)
         {
             AcquireTarget();
             return;
@@ -92,10 +92,12 @@ public class GuidedMissile : MonoBehaviour {
 
     }
 
-
+    /// <summary>
+    /// Find the closest enemy unit and sets it as our target.
+    /// </summary>
     void AcquireTarget()
     {
-        if (targetObject == null || target == null)
+        if (targetObject == null)
         {
             GameObject closestEnemy = null;
             foreach (GameObject go in UnitTracker.GetActiveEnemies(gameObject))

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public enum ObjectiveTextType { NEUTRALIZE_SHIPS = 0, NEUTRALIZE_WAVES = 1 };
+
 /// <summary>
 /// Controller for objective UI display.
 /// </summary>

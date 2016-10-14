@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// Controls firing of a units' weapons.
+/// Controls firing a units' weapons.
 /// </summary>
 public class WeaponsController: MonoBehaviour
 {
@@ -19,6 +19,12 @@ public class WeaponsController: MonoBehaviour
     int primaryAmmoMax;
 
     [SerializeField]
+    bool primaryAmmoRegenerates;
+
+    [SerializeField]
+    float primaryAmmoRegenRate; //Ammo per second.
+
+    [SerializeField]
     GameObject secondaryWeapon;
 
     [SerializeField]
@@ -29,6 +35,12 @@ public class WeaponsController: MonoBehaviour
 
     [SerializeField]
     int secondaryAmmoMax;
+
+    [SerializeField]
+    bool secondaryAmmoRegenerates;
+
+    [SerializeField]
+    float secondaryAmmoRegenRate; //Ammo per second.
 
     [SerializeField]
     GameObject tertiaryWeapon;
@@ -43,6 +55,12 @@ public class WeaponsController: MonoBehaviour
     int tertiaryAmmoMax;
 
     [SerializeField]
+    bool tertiaryAmmoRegenerates;
+
+    [SerializeField]
+    float tertiaryAmmoRegenRate; //Ammo per second.
+
+    [SerializeField]
     Transform[] primaryWeaponShotSpawns;
 
     [SerializeField]
@@ -55,6 +73,7 @@ public class WeaponsController: MonoBehaviour
 
     float nextFirePrimary = 0, nextFireSecondary = 0, nextFireTertiary = 0;
     int primaryAmmoCurrent, secondaryAmmoCurrent, tertiaryAmmoCurrent;
+    float nextRegenPrimary, nextRegenSecondary, nextRegenTertiary;
 
     void Start()
     {
@@ -67,7 +86,27 @@ public class WeaponsController: MonoBehaviour
         if (tertiaryAmmoLimited)
             tertiaryAmmoCurrent = tertiaryAmmoMax;
 
+        if (primaryAmmoRegenRate >= 0)
+            nextRegenPrimary = Time.time + (1 / primaryAmmoRegenRate);
+        else
+            nextRegenPrimary = float.MaxValue;
+
+        if (secondaryAmmoRegenRate >= 0)
+            nextRegenSecondary= Time.time + (1 / secondaryAmmoRegenRate);
+        else
+            nextRegenSecondary = float.MaxValue;
+
+        if (tertiaryAmmoRegenRate >= 0)
+            nextRegenTertiary = Time.time + (1 / tertiaryAmmoRegenRate);
+        else
+            nextRegenTertiary = float.MaxValue;
+
         AdjustWeaponsDisplay();
+    }
+
+    void Update()
+    {
+        CheckAmmoRegen();
     }
 
     void AdjustWeaponsDisplay()
@@ -94,6 +133,46 @@ public class WeaponsController: MonoBehaviour
                 HUDController.Instance.SetWeaponsCount(3, tertiaryAmmoCurrent);
             else
                 HUDController.Instance.SetWeaponsCount(3, true);
+        }
+    }
+
+    public void CheckAmmoRegen()
+    {
+        if (primaryAmmoRegenerates && Time.time > nextRegenPrimary)
+        {
+            if (primaryAmmoCurrent < primaryAmmoMax)
+                primaryAmmoCurrent++;
+
+            if (primaryAmmoRegenRate >= 0)
+                nextRegenPrimary = Time.time + (1 / primaryAmmoRegenRate);
+            else
+                nextRegenPrimary = float.MaxValue;
+
+            AdjustWeaponsDisplay();
+        }
+        if (secondaryAmmoRegenerates && Time.time > nextRegenSecondary)
+        {
+            if (secondaryAmmoCurrent < secondaryAmmoMax)
+                secondaryAmmoCurrent++;
+
+            if (secondaryAmmoRegenRate >= 0)
+                nextRegenSecondary = Time.time + (1 / secondaryAmmoRegenRate);
+            else
+                nextRegenSecondary = float.MaxValue;
+
+            AdjustWeaponsDisplay();
+        }
+        if (tertiaryAmmoRegenerates && Time.time > nextRegenTertiary)
+        {
+            if (tertiaryAmmoCurrent < tertiaryAmmoMax)
+                tertiaryAmmoCurrent++;
+
+            if (tertiaryAmmoRegenRate >= 0)
+                nextRegenTertiary = Time.time + (1 / tertiaryAmmoRegenRate);
+            else
+                nextRegenTertiary = float.MaxValue;
+
+            AdjustWeaponsDisplay();
         }
     }
 
@@ -150,6 +229,40 @@ public class WeaponsController: MonoBehaviour
             GameObject projectile = Instantiate(secondaryWeapon, tf.position, tf.rotation) as GameObject;
             projectile.layer = 8;
             secondaryAmmoCurrent--;
+
+            //Set projectile's owner and teamID.
+            if (projectile.GetComponent<ProjectileInfo>() != null)
+            {
+                projectile.GetComponent<ProjectileInfo>().Owner = gameObject;
+                projectile.GetComponent<ProjectileInfo>().TeamID = myInfo.TeamID;
+            }
+            //Adjust projectile's velocity based on our velocity.
+            if (projectile.GetComponent<ProjectileMover>() != null && GetComponent<Rigidbody>() != null)
+                projectile.GetComponent<ProjectileMover>().AddVelocity(GetComponent<Rigidbody>().velocity);
+        }
+
+        AdjustWeaponsDisplay();
+    }
+
+    public void FireTertiaryWeapon()
+    {
+        if (Time.time < nextFireTertiary || (tertiaryAmmoLimited && tertiaryAmmoCurrent < tertiaryWeaponShotSpawns.Length))
+            return;
+
+        nextFireTertiary = Time.time + tertiaryCooldown;
+
+        if (tertiaryWeapon == null || tertiaryWeaponShotSpawns.Length == 0)
+        {
+            Debug.LogError("No tertiary weapon or transform set, can't fire.");
+            return;
+        }
+
+        foreach (Transform tf in tertiaryWeaponShotSpawns)
+        {
+            //Create projectile.
+            GameObject projectile = Instantiate(tertiaryWeapon, tf.position, tf.rotation) as GameObject;
+            projectile.layer = 8;
+            tertiaryAmmoCurrent--;
 
             //Set projectile's owner and teamID.
             if (projectile.GetComponent<ProjectileInfo>() != null)

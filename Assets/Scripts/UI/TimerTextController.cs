@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public enum TimerTextType { ELAPSED = 1, REMAINING = 0 };
 /// <summary>
 /// Controller for timer UI display.
 /// </summary>

@@ -21,7 +21,11 @@ public class Health : MonoBehaviour
         myInfo = GetComponent<UnitInfo>();
         currentHealth = myInfo.MaxHealth;
         currentShields = myInfo.MaxShields;
-        shieldRegenRate = myInfo.ShieldRegenRate;
+
+        if (myInfo.ShieldRegenRate >= 0)
+            shieldRegenRate = myInfo.ShieldRegenRate;
+        else
+            Debug.LogError("Shield Regen Rate can not be negative.");
 
         AdjustHPDisplay();
     }

@@ -22,6 +22,15 @@ public class UnitInfo : MonoBehaviour
     float maxSpeed;
 
     [SerializeField]
+    float maxPitchSpeed;
+
+    [SerializeField]
+    float maxRollSpeed;
+
+    [SerializeField]
+    float maxYawSpeed;
+
+    [SerializeField]
     GameObject explosion;
 
     [SerializeField]
@@ -55,10 +64,22 @@ public class UnitInfo : MonoBehaviour
         set { maxSpeed = value; }
     }
 
+    public float MaxPitchSpeed { get { return maxPitchSpeed; } }
+
+    public float MaxRollSpeed { get { return maxRollSpeed; } }
+
+    public float MaxYawSpeed { get { return maxYawSpeed; } }
+
     public float ShieldRegenRate
     {
         get { return shieldRegenRate; }
-        set { shieldRegenRate = value; }
+        set
+        {
+            if (value >= 0)
+                shieldRegenRate = value;
+            else
+                Debug.LogError("Shield Regen Rate can not be negative.");
+        }
     }
 
     public int TeamID

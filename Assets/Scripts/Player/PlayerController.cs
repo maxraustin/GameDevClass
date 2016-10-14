@@ -2,27 +2,19 @@
 using System.Collections;
 using System;
 
-public enum ControlType { Legacy, Mouse };
 public class PlayerController : MonoBehaviour {
     static PlayerController instance;
     public const int MAX_THROTTLE_PERCENT = 100;
     public const int MIN_THROTTLE_PERCENT = 15;
-
-    [SerializeField]
-    ControlType controlType = ControlType.Mouse;
 
     UnitInfo myInfo;
     WeaponsController weaponsController;
     public Rigidbody myRigidbody;
 
     public int throttlePercentage = MIN_THROTTLE_PERCENT;
-    public int rotationSpeed = 2;
     public float mouseSensitivity = 200.0f;
     public Texture2D cursor;
     public float cursorScale = 0.5f;
-
-    bool mouseControlsEnabled = true;
-
 
     void Awake() {
         instance = this;
@@ -73,16 +65,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Rotate() {
-        if (controlType == ControlType.Legacy) {
-            float keyboardInputHorizontal = Input.GetAxisRaw("Horizontal") * rotationSpeed;
-            float mouseInputVertical = 0;
-            if (mouseControlsEnabled)
-                mouseInputVertical = Input.GetAxisRaw("Mouse Y");
-            //float mouseInputHorizontal= 0;
-            //if (mouseControlsEnabled)
-            //mouseInputHorizontal = Input.GetAxisRaw("Mouse X");
-
-
+        if (UserSettings.ControlType == ControlType.MouseAim) {
+            float keyboardRollInput = Input.GetAxisRaw("Roll");
+            float keyboardYawInput = Input.GetAxisRaw("Yaw");
 
             Vector3 mousePos = Input.mousePosition;
             mousePos.x -= Screen.width / 2;
@@ -90,13 +75,28 @@ public class PlayerController : MonoBehaviour {
 
             float vertAccel = Math.Abs(mousePos.y) > mouseSensitivity ? (mousePos.y < 0 ? -1 : 1) * 1.0f : mousePos.y / mouseSensitivity;
             float horizAccel = Math.Abs(mousePos.x) > mouseSensitivity ? (mousePos.x < 0 ? -1 : 1) * 1.0f : mousePos.x / mouseSensitivity;
-            transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel, keyboardInputHorizontal / 4, -horizAccel));
+            if (keyboardRollInput != 0) //Keyboard override for roll.
+                horizAccel = keyboardRollInput;
+
+            transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel * myInfo.MaxPitchSpeed, keyboardYawInput * myInfo.MaxYawSpeed, -horizAccel * myInfo.MaxRollSpeed));
             //transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel, horizAccel/4, -keyboardInputHorizontal));
         }
-    }
+        else if (UserSettings.ControlType == ControlType.Legacy)
+        {
+            float keyboardYawInput = Input.GetAxisRaw("Yaw");
 
-    public void SetMouseControlsEnabled(bool enabled) {
-        mouseControlsEnabled = enabled;
+            float mouseInputVertical = Input.GetAxisRaw("Mouse Y");
+            if (mouseInputVertical > 1) mouseInputVertical = 1;
+            else if (mouseInputVertical < -1) mouseInputVertical = -1;
+
+            float mouseInputHorizontal = Input.GetAxisRaw("Mouse X");
+            if (mouseInputHorizontal > 1) mouseInputHorizontal = 1;
+            else if (mouseInputHorizontal < -1) mouseInputHorizontal = -1;
+
+            Debug.Log("mouseInputVertical: " + mouseInputVertical + ". mouseInputHorizontal: " + mouseInputHorizontal + ". keyboardYawInput: " + keyboardYawInput);
+
+            transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(mouseInputVertical * myInfo.MaxPitchSpeed, keyboardYawInput * myInfo.MaxYawSpeed, -mouseInputHorizontal * myInfo.MaxRollSpeed));
+        }
     }
 
     void SetVelocity() {

@@ -16,15 +16,11 @@ public class GameMasterScripts : MonoBehaviour {
 	//An array of menus. Used to select menus and deactivate them
 	Canvas[] menus;
 
-	[SerializeField]
-	bool legacyEnabled;
-
 	// Use this for initialization
 	void Start () {
-		legacyEnabled = true;
 		/*This object must persist when loading levels as it controls when the player goes back to the menu and
 		saves progress */
-		DontDestroyOnLoad (this.gameObject);
+		//DontDestroyOnLoad (this.gameObject);
 		/*Activate the start menu*/
 		for (int i = 0; i < menus.Length; i++) {
 			if (i > 0) {
@@ -42,8 +38,13 @@ public class GameMasterScripts : MonoBehaviour {
 	/// Toggles legacy controsl on and off
 	/// </summary>
 	public void LegacyToggle(bool choice){
-		legacyEnabled = choice;
-	}
+        if (choice)
+            UserSettings.ControlType = ControlType.Legacy;
+        else
+            UserSettings.ControlType = ControlType.MouseAim;
+
+        SaveController.SaveControlType();
+    }
 	/// <summary>
 	/// Call this when navigating menus. It takes an int, which tells it which menu to pick
 	/// </summary>

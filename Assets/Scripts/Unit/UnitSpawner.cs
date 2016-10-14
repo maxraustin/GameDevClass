@@ -39,6 +39,13 @@ public class UnitSpawner : MonoBehaviour {
         return unit;
     }
 
+    /// <summary>
+    /// Spawns a given unit type at given location with a given rotation.
+    /// </summary>
+    /// <param name="unitType">Type of unit to spawn.</param>
+    /// <param name="spawnLocation">Location to spawn the unit.</param>
+    /// <param name="spawnRotation">Rotation to spawn the unit.</param>
+    /// <returns></returns>
     public static GameObject SpawnUnit(GameObject unitType, Vector3 spawnLocation, Quaternion spawnRotation)
     {
         if (unitType == null)
@@ -57,7 +64,14 @@ public class UnitSpawner : MonoBehaviour {
 
         return unit;
     }
-    
+
+    /// <summary>
+    /// Spawns a given count of a given unit type within a given GameObject.
+    /// </summary>
+    /// <param name="unitType">Type of unit to spawn.</param>
+    /// <param name="spawnCount">The amount of units to spawn.</param>
+    /// <param name="spawnBox">The GameObject to spawn the units inside.</param>
+    /// <returns>A list of all the spawned GameObjects.</returns>
     public static List<GameObject> SpawnUnitsInArea(GameObject unitType, int spawnCount, GameObject spawnBox)
     {
         if (spawnBox.GetComponent<BoxCollider>() == null)
@@ -86,6 +100,11 @@ public class UnitSpawner : MonoBehaviour {
         return spawnedUnits;
     }
 
+    /// <summary>
+    /// Returns if the given position is within a collider of any unit in the scene.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns>True if the given position is within any unit's collider, false if not.</returns>
     static bool PositionInsideAnyUnitCollider(Vector3 position)
     {
         List<GameObject> units = UnitTracker.GetActiveUnits();
