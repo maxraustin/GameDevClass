@@ -9,6 +9,10 @@ public class HealthAndShieldsDisplayController : MonoBehaviour
 {
     Text healthDisplay, shieldsDisplay;
     bool hasInitialized;
+	[SerializeField]
+	Image healthBar;
+	[SerializeField]
+	Image shieldBar;
 
     void Start()
     {
@@ -34,6 +38,9 @@ public class HealthAndShieldsDisplayController : MonoBehaviour
 
         healthDisplay.text = "Health: " + currentHP;
         healthDisplay.color = Color.Lerp(Color.red, Color.green, (float)currentHP / maxHP);
+		if (healthBar != null) {
+			healthBar.fillAmount = (float)(currentHP) / (float)(maxHP);
+		}
     }
 
     public void SetShields(int currentShields, int maxShields)
@@ -43,5 +50,8 @@ public class HealthAndShieldsDisplayController : MonoBehaviour
 
         shieldsDisplay.text = "Shields: " + currentShields;
         shieldsDisplay.color = Color.Lerp(Color.white, Color.blue, (float)currentShields / maxShields);
+		if (shieldBar != null) {
+			shieldBar.fillAmount = (float)(currentShields) / (float)(maxShields);
+		}
     }
 }

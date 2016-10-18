@@ -69,6 +69,12 @@ public class WeaponsController: MonoBehaviour
     [SerializeField]
     Transform[] tertiaryWeaponShotSpawns;
 
+	//SFX FOR WEAPONS
+	[SerializeField]
+	AudioSource primarySource;
+	[SerializeField]
+	AudioSource secondarySource;
+
     UnitInfo myInfo;
 
     float nextFirePrimary = 0, nextFireSecondary = 0, nextFireTertiary = 0;
@@ -193,6 +199,7 @@ public class WeaponsController: MonoBehaviour
         {
             //Create projectile.
             GameObject projectile = Instantiate(primaryWeapon, tf.position, tf.rotation) as GameObject;
+			primarySource.Play ();
             projectile.layer = 8;
             primaryAmmoCurrent--;
 
@@ -227,6 +234,7 @@ public class WeaponsController: MonoBehaviour
         {
             //Create projectile.
             GameObject projectile = Instantiate(secondaryWeapon, tf.position, tf.rotation) as GameObject;
+			secondarySource.Play ();
             projectile.layer = 8;
             secondaryAmmoCurrent--;
 

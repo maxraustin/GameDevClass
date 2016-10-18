@@ -63,8 +63,7 @@ public class UnitTracker : MonoBehaviour
     {
         playerShip = null;
         playerTeamID = -1;
-        if (activeUnits != null)
-            activeUnits.Clear();      
+        activeUnits.Clear();
     }
 
     /// <summary>

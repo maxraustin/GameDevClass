@@ -9,6 +9,8 @@ public class WeaponDisplayController : MonoBehaviour
 {
     Text primaryWeaponDisplay, secondaryWeaponDisplay, tertiaryWeaponDisplay;
     bool hasInitialized;
+	[SerializeField]
+	Text secondaryCount;
 
     void Start()
     {
@@ -59,6 +61,9 @@ public class WeaponDisplayController : MonoBehaviour
             Initialiaze();
 
         secondaryWeaponDisplay.text = "Weapon2: " + count;
+		if (secondaryCount != null) {
+			secondaryCount.text = "X " + count;
+		}
     }
 
     public void SetSecondaryWeaponCount(bool isInfinite)

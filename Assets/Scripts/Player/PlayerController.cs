@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour {
     public float mouseSensitivity = 200.0f;
     public Texture2D cursor;
     public float cursorScale = 0.5f;
+	[SerializeField]
+	ParticleSystem[] thrusterFX;
+	[SerializeField]
+	AudioSource engineSFX;
 
     void Awake() {
         instance = this;
@@ -62,6 +66,14 @@ public class PlayerController : MonoBehaviour {
             throttlePercentage--;
             if (HUDController.Instance != null) HUDController.Instance.SetThrottleTextPercentage(throttlePercentage);
         }
+		//Adjust the thrust fx based on throttle
+		for (int i = 0; i < thrusterFX.Length; i++) {
+			thrusterFX [i].startSpeed = throttlePercentage/5;
+			thrusterFX [i].startLifetime = Mathf.Clamp(throttlePercentage,0f,.1f);
+			thrusterFX [i].emissionRate = myRigidbody.velocity.magnitude;
+		}
+		//A little hacky of a way to do this but i wanted a precise range for the sound
+		engineSFX.pitch = throttlePercentage / 18f;
     }
 
     void Rotate() {

@@ -125,11 +125,20 @@ public class Health : MonoBehaviour
     {
         if (currentShields >= dmg)
         {
+			//If a shield particle system is present...
+			if (GetComponentInChildren<CameraFXController> () != null) {
+				GetComponentInChildren<CameraFXController> ().PlayShields ();
+			}
             currentShields -= dmg;
             AdjustHPDisplay();
         }
         else
         {
+			//Camera shake when HEALTH is hurt, not shields
+			//Check if we want to shake this ships camera. If yes, then do it
+			if (GetComponentInChildren<PerlinShake> () != null) {
+				GetComponentInChildren<PerlinShake> ().PlayShake ();
+			}
             dmg -= currentShields;
             currentShields = 0;
             currentHealth -= dmg;
