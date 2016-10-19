@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Singleton class that handles behaviours for scene starup and ending the scene. Should be attached as a component to the "GameController" GameObject.
+/// </summary>
 public class GameController : MonoBehaviour
 {
     private static GameController instance;
@@ -18,13 +21,17 @@ public class GameController : MonoBehaviour
     {
         instance = this;
 
+        UnitTracker.Clear();
+        ProjectileTracker.Clear();
+
         UnitSpawner.SpawnUnitsInArea(GameSettings.CurrentPlayerShip, 1, currentLevelController.CurrentPlayerSpawn);
     }
 
     void Start()
     {
-        if (Time.timeScale != 1) //Should handle in pausecontroller
-            Time.timeScale = 1;
+        PauseController.UnpauseAll();
+
+        CursorController.SetCursorAccordingToControls();
     }
 
 

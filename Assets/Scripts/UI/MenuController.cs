@@ -7,6 +7,7 @@ using System.Collections;
 public class MenuController : MonoBehaviour
 {
     static MenuController instance;
+    GameObject optionsPanel;
 
     bool isMenuOpen = false;
 
@@ -39,12 +40,47 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        optionsPanel = transform.Find("OptionsPanel").gameObject;
+    }
+
     /// <summary>
     /// Exits application. (Called when the exit button in the menu is clicked.)
     /// </summary>
     public void Button_Exit()
     {
         Application.Quit();
+    }
+
+    public void Button_Options()
+    {
+        optionsPanel.SetActive(true);
+    }
+
+    public void Button_OptionsPanel_Close()
+    {
+        optionsPanel.SetActive(false);
+    }
+
+    public void Button_OptionsPanel_MouseAim1()
+    {
+        UserSettings.ControlType = ControlType.MouseAim;
+    }
+
+    public void Button_OptionsPanel_MouseAim2()
+    {
+        UserSettings.ControlType = ControlType.Legacy;
+    }
+
+    public void Button_OptionsPanel_MousePos1()
+    {
+        UserSettings.ControlType = ControlType.MousePos;
+    }
+
+    public void Button_OptionsPanel_MousePos2()
+    {
+        UserSettings.ControlType = ControlType.MousePosRoll;
     }
 
     /// <summary>
@@ -88,7 +124,10 @@ public class MenuController : MonoBehaviour
     {
         PauseController.MenuOpen(isMenuOpen);
 
-        CursorController.ShowCursor(isMenuOpen);
+        if (isMenuOpen)
+            CursorController.ShowCursor();
+        else
+            CursorController.SetCursorAccordingToControls();
 
         UIElementsTracker.Instance.Menu.SetActive(isMenuOpen);
     }

@@ -42,7 +42,8 @@ public class ProjectileTracker : MonoBehaviour
     /// </summary>
     public static void Clear()
     {
-        activeProjectiles.Clear();
+        if (activeProjectiles != null)
+            activeProjectiles.Clear();
     }
 
 

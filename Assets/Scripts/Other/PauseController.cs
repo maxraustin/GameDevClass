@@ -27,4 +27,11 @@ public class PauseController : MonoBehaviour
         else
             Time.timeScale = 1;
     }
+
+    public static void UnpauseAll()
+    {
+        pausedMenu = false;
+
+        TogglePause();
+    }
 }

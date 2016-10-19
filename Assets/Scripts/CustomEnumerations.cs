@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum ControlType { Legacy = 1, MouseAim = 0 }
+public enum ControlType {
+    Legacy,
+    MouseAim,
+    MousePos,
+    MousePosRoll
+}
 
 public enum ObjectiveTextType { NEUTRALIZE_SHIPS = 0, NEUTRALIZE_WAVES = 1 }
 
