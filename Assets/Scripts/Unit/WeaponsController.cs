@@ -81,6 +81,10 @@ public class WeaponsController: MonoBehaviour
     int primaryAmmoCurrent, secondaryAmmoCurrent, tertiaryAmmoCurrent;
     float nextRegenPrimary, nextRegenSecondary, nextRegenTertiary;
 
+    public GameObject PrimaryWeapon { get { return primaryWeapon; } }
+    public GameObject SecondaryWeapon { get { return secondaryWeapon; } }
+    public GameObject TertiaryWeapon { get { return tertiaryWeapon; } }
+
     void Start()
     {
         myInfo = GetComponent<UnitInfo>();
