@@ -32,20 +32,6 @@ public class CollisionHandler : MonoBehaviour
     /// <param name="otherUnit">The unit we hit.</param>
     void HitUnit(GameObject otherUnit)
     {
-        // if otherUnit name == kingAI destroy yourself -- you don't stand a chance
-        // ToDo create forcefield for the kingAI that must be taken down first
-        if (otherUnit.name == "kingAI")
-        {       
-            // instantiate explosion at collision location
-            GameObject explosion = Instantiate(Resources.Load("Explosions/explosion_boss"), transform.position, transform.rotation) as GameObject;
-
-            // destroy gameObject
-            Destroy(gameObject, 0);
-
-            // clean up explosion
-            Destroy(explosion, 5);
-        }
-
         //If we are a projectile and hit the unit that created us: return.
         if (GetComponent<ProjectileInfo>() != null && GetComponent<ProjectileInfo>().Owner == otherUnit)
             return;
@@ -59,7 +45,7 @@ public class CollisionHandler : MonoBehaviour
         if (tag.Equals("Projectile") && GetComponent<ProjectileInfo>() != null) //If we are a projectile: deal our projetile damage.
             damageToDeal = GetComponent<ProjectileInfo>().Damage;
         else if (tag.Equals("Unit") && GetComponent<UnitInfo>() != null) //If we are a unit: deal 2x our max health as damage.
-            damageToDeal = GetComponent<UnitInfo>().MaxHealth * 2;
+            damageToDeal = GetComponent<UnitInfo>().MaxHealth + GetComponent<UnitInfo>().MaxShields;
 
         //Deal damage to other unit.
         if (otherUnit.GetComponent<Health>() != null)

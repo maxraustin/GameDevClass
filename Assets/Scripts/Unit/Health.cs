@@ -16,6 +16,9 @@ public class Health : MonoBehaviour
     float shieldRegenRate;
     float nextShieldRegenTime;
 
+    public int CurrentHealth { get { return currentHealth; } }
+    public int CurrentShields { get { return currentShields; } }
+
     void Start()
     {
         myInfo = GetComponent<UnitInfo>();

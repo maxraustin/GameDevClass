@@ -64,7 +64,7 @@ public class RotationCalculator : MonoBehaviour {
     public static Quaternion RotationToHitTarget(GameObject shooter, GameObject projectile, GameObject target, RandomOffset offsetAmount)
     {
         Vector3 p0 = target.transform.position;
-        Vector3 v0 = -target.GetComponent<Rigidbody>().velocity.normalized;
+        Vector3 v0 = target.GetComponent<Rigidbody>().velocity.normalized;
         float s0 = target.GetComponent<Rigidbody>().velocity.magnitude;
         Vector3 p1 = shooter.transform.position;
         float s1 = projectile.GetComponent<ProjectileInfo>().Speed;
@@ -79,17 +79,15 @@ public class RotationCalculator : MonoBehaviour {
         float t1 = (-b + Mathf.Sqrt((b * b) - (4 * a * c))) / (2 * a);
         float t2 = (-b - Mathf.Sqrt((b * b) - (4 * a * c))) / (2 * a);
 
-        float t = t1;
-        if (t2 < t1) t = t2;
-
-        if (t < 0) t = t1;
+        float t = Mathf.Min(t1, t2);
+        if (t < 0) t = Mathf.Max(t1, t2);
         if (t < 0) Debug.Log("t < 0");
 
         float vx = (p0.x - p1.x + (t * s0 * v0.x)) / (t * s1);
         float vy = (p0.y - p1.y + (t * s0 * v0.y)) / (t * s1);
         float vz = (p0.z - p1.z + (t * s0 * v0.z)) / (t * s1);
 
-        Vector3 targetVector = -new Vector3(vx, vy, vz);
+        Vector3 targetVector = new Vector3(vx, vy, vz);
 
         float randomnessFactor = 0;
         if (offsetAmount == RandomOffset.TINY) randomnessFactor = 0.01f;
