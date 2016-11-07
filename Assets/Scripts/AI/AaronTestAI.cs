@@ -37,8 +37,7 @@ public class AaronTestAI : MonoBehaviour
     {
         if (target != null)
         {
-            Vector3 direction = (target.transform.position - transform.position).normalized;
-            Quaternion lookRotation = RotationCalculator.RotationToHitTarget(gameObject, weaponsController.PrimaryWeapon, target, RandomOffset.SMALL);
+            Quaternion lookRotation = RotationCalculator.RotationToHitTarget(gameObject, weaponsController.PrimaryWeapon, target, RandomOffset.SMALL, Vector3.zero, true);
             transform.rotation = lookRotation;//Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * turnRate);
         }
         else

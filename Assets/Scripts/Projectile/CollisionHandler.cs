@@ -21,7 +21,13 @@ public class CollisionHandler : MonoBehaviour
     void HitImmovableObject()
     {
         if (tag.Equals("Unit") && GetComponent<Health>() != null)
-            GetComponent<Health>().TakeDamage(1000000);
+        {
+            if (GetComponent<Rigidbody>().velocity.magnitude == 0)
+                return;
+
+            //GetComponent<Health>().TakeDamage((int) (GetComponent<Rigidbody>().velocity.magnitude / 3));
+            GetComponent<Health>().TakeDamage(int.MaxValue);
+        }
         else if (tag.Equals("Projectile"))
             Destroy(gameObject);
     }

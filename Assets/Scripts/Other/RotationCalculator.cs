@@ -50,7 +50,7 @@ public class RotationCalculator : MonoBehaviour {
     /// <returns>Quaternion for shooter GameObject to accurately shoot target GameObject.</returns>
     public static Quaternion RotationToHitTarget(GameObject shooter, GameObject projectile, GameObject target)
     {
-        return RotationToHitTarget(shooter, projectile, target, RandomOffset.NONE);
+        return RotationToHitTarget(shooter, projectile, target, RandomOffset.NONE, Vector3.zero, false);
     }
 
     /// <summary>
@@ -60,10 +60,11 @@ public class RotationCalculator : MonoBehaviour {
     /// <param name="projectile">The Projectile to be fired.</param>
     /// <param name="target">The GameObject to shoot at.</param>
     /// <param name="offsetAmount">Amount of random offset to apply to the rotation.</param>
+    /// <param name="aimOffset">Distance from target position to aim at.</param>
     /// <returns>Quaternion for shooter GameObject to accurately shoot target GameObject.</returns>
-    public static Quaternion RotationToHitTarget(GameObject shooter, GameObject projectile, GameObject target, RandomOffset offsetAmount)
+    public static Quaternion RotationToHitTarget(GameObject shooter, GameObject projectile, GameObject target, RandomOffset offsetAmount, Vector3 aimOffset, bool rotationInstant)
     {
-        Vector3 p0 = target.transform.position;
+        Vector3 p0 = target.transform.position + aimOffset;
         Vector3 v0 = target.GetComponent<Rigidbody>().velocity.normalized;
         float s0 = target.GetComponent<Rigidbody>().velocity.magnitude;
         Vector3 p1 = shooter.transform.position;
@@ -95,6 +96,9 @@ public class RotationCalculator : MonoBehaviour {
         else if (offsetAmount == RandomOffset.MEDIUM) randomnessFactor = 0.03f;
         else if (offsetAmount == RandomOffset.LARGE) randomnessFactor = 0.05f;
         else if (offsetAmount == RandomOffset.GIANT) randomnessFactor = 0.1f;
+
+        if (!rotationInstant)
+            randomnessFactor *= 7.5f;
 
         Vector3 lookVector = targetVector + new Vector3(Random.Range(-randomnessFactor, randomnessFactor), Random.Range(-randomnessFactor, randomnessFactor), Random.Range(-randomnessFactor, randomnessFactor));
         Quaternion lookRotation = Quaternion.LookRotation(lookVector);
