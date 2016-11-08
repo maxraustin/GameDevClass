@@ -202,7 +202,7 @@ public class WeaponsController: MonoBehaviour
         foreach(Transform tf in primaryWeaponShotSpawns)
         {
             //Create projectile.
-            GameObject projectile = Instantiate(primaryWeapon, tf.position, tf.rotation) as GameObject;
+            GameObject projectile = ProjectilePoolController.Instance.GetProjectile(primaryWeapon, tf.position, tf.rotation);//Instantiate(primaryWeapon, tf.position, tf.rotation) as GameObject;
 			primarySource.Play ();
             projectile.layer = 8;
             primaryAmmoCurrent--;
@@ -237,8 +237,8 @@ public class WeaponsController: MonoBehaviour
         foreach (Transform tf in secondaryWeaponShotSpawns)
         {
             //Create projectile.
-            GameObject projectile = Instantiate(secondaryWeapon, tf.position, tf.rotation) as GameObject;
-			secondarySource.Play ();
+            GameObject projectile = ProjectilePoolController.Instance.GetProjectile(secondaryWeapon, tf.position, tf.rotation);//Instantiate(secondaryWeapon, tf.position, tf.rotation) as GameObject;
+            secondarySource.Play ();
             projectile.layer = 8;
             secondaryAmmoCurrent--;
 
@@ -272,7 +272,7 @@ public class WeaponsController: MonoBehaviour
         foreach (Transform tf in tertiaryWeaponShotSpawns)
         {
             //Create projectile.
-            GameObject projectile = Instantiate(tertiaryWeapon, tf.position, tf.rotation) as GameObject;
+            GameObject projectile = ProjectilePoolController.Instance.GetProjectile(tertiaryWeapon, tf.position, tf.rotation);//Instantiate(tertiaryWeapon, tf.position, tf.rotation) as GameObject;
             projectile.layer = 8;
             tertiaryAmmoCurrent--;
 

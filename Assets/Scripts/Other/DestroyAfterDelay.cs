@@ -9,6 +9,9 @@ public class DestroyAfterDelay : MonoBehaviour {
     [SerializeField]
     float delay = 5.0f;
 
+    [SerializeField]
+    bool actuallyDestroy;
+
 	void OnDisable()
     {
         CancelInvoke();
@@ -20,6 +23,9 @@ public class DestroyAfterDelay : MonoBehaviour {
 	
 	void Destroy()
     {
-        Destroy(gameObject);
+        if (actuallyDestroy)
+            Destroy(gameObject);
+        else
+            gameObject.SetActive(false);
     }
 }

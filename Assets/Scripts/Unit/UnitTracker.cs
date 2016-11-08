@@ -9,6 +9,7 @@ public class UnitTracker : MonoBehaviour
 {
     private static GameObject playerShip;
     private static List<GameObject> activeUnits;
+    private static List<GameObject> objectiveUnits;
 
     static int playerTeamID = -1;
     static bool hasInitialized = false;
@@ -18,6 +19,7 @@ public class UnitTracker : MonoBehaviour
         if (!hasInitialized)
         {
             activeUnits = new List<GameObject>();
+            objectiveUnits = new List<GameObject>();
             hasInitialized = true;
         }
     }
@@ -40,9 +42,27 @@ public class UnitTracker : MonoBehaviour
     }
 
     /// <summary>
+    /// Adds a unit gameObject to the list of active units and the list of objective units.
+    /// </summary>
+    /// <param name="unit">Unit to add to the lists.</param>
+    public static void AddObjectiveUnit(GameObject unit)
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        if (!unit.tag.Equals("Unit"))
+            throw new System.Exception("You are trying to add a gameobject to the active units list but it doesn't seem to be a unit.");
+        if (unit.GetComponent<UnitInfo>() == null)
+            throw new MissingComponentException("You are trying to add a gameobject to the active units list but it doesn't have a UnitInfo component.");
+
+        activeUnits.Add(unit);
+        objectiveUnits.Add(unit);
+    }
+
+    /// <summary>
     /// Add a unit gameObject to the list of active units.
     /// </summary>
-    /// <param name="unit">Reference to the unit gameobject to add to the list.</param>
+    /// <param name="unit">Unit to add to the list..</param>
     public static void AddUnit(GameObject unit)
     {
         if (!hasInitialized)
@@ -65,6 +85,8 @@ public class UnitTracker : MonoBehaviour
         playerTeamID = -1;
         if (activeUnits != null)
             activeUnits.Clear();
+        if (objectiveUnits != null)
+            objectiveUnits.Clear();
     }
 
     /// <summary>
@@ -217,7 +239,7 @@ public class UnitTracker : MonoBehaviour
         //Remove any null objects from the list.
         activeUnits.RemoveAll(unit => unit == null);
 
-        //Create a units of projectiles from activeUnits.
+        //Create a list of units from activeUnits.
         List<GameObject> units = new List<GameObject>();
         foreach (GameObject go in activeUnits)
         {
@@ -234,14 +256,81 @@ public class UnitTracker : MonoBehaviour
     }
 
     /// <summary>
-    /// Remove a unit gameObject from the list of active units.
+    /// Returns all the active units that are enemies of the player.
     /// </summary>
-    /// <param name="unit">Reference to the unit gameobject to remove from the list.</param>
+    /// <returns>List of units that are allies of the player.</returns>
+    public static List<GameObject> GetObjectiveEnemies()
+    {
+        if (playerTeamID == -1)
+            return new List<GameObject>();
+        else
+            return GetObjectiveUnits(playerTeamID, false);
+    }
+
+    /// <summary>
+    /// Returns all the active units that are not on the given team.
+    /// </summary>
+    /// <param name="teamID">Team who's enemies you want to get.</param>
+    /// <returns>List of units that are not on the given team.</returns>
+    public static List<GameObject> GetObjectiveEnemies(int teamID)
+    {
+        return GetObjectiveUnits(teamID, false);
+    }
+
+    /// <summary>
+    /// Returns all the active units that are enemies of the given GameObject.
+    /// </summary>
+    /// <param name="go">GameObject (unit or projectile) who's enemies you want to get.</param>
+    /// <returns>List of units that are enemies of the given GameObject.</returns>
+    public static List<GameObject> GetObjectiveEnemies(GameObject go)
+    {
+        int teamID = -1;
+        if (go.GetComponent<UnitInfo>() != null)
+            teamID = go.GetComponent<UnitInfo>().TeamID;
+        else if (go.GetComponent<ProjectileInfo>() != null)
+            teamID = go.GetComponent<ProjectileInfo>().TeamID;
+
+        if (teamID == -1)
+            return new List<GameObject>();
+        else
+            return GetObjectiveUnits(teamID, false);
+    }
+
+    public static List<GameObject> GetObjectiveUnits(int teamID, bool onTeam)
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        //Remove any null objects from the list.
+        objectiveUnits.RemoveAll(unit => unit == null);
+
+        //Create a list of units from activeUnits.
+        List<GameObject> units = new List<GameObject>();
+        foreach (GameObject go in objectiveUnits)
+        {
+            if (go.GetComponent<UnitInfo>() != null)
+            {
+                if (onTeam && go.GetComponent<UnitInfo>().TeamID == teamID)
+                    units.Add(go);
+                else if (!onTeam && go.GetComponent<UnitInfo>().TeamID != teamID)
+                    units.Add(go);
+            }
+        }
+
+        return units;
+    }
+
+
+    /// <summary>
+    /// Remove a unit gameObject from the list of active and objective units.
+    /// </summary>
+    /// <param name="unit">Reference to the unit gameobject to remove from the lists.</param>
     public static void RemoveUnit(GameObject unit)
     {
         if (!hasInitialized)
             return;
 
         activeUnits.Remove(unit);
+        objectiveUnits.Remove(unit);
     }
 }

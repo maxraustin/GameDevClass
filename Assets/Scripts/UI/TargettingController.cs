@@ -53,7 +53,7 @@ public class TargettingController : MonoBehaviour {
 						//After that sinful line of code we assign the target if the current one being checked is closest to the center of the screen (reticle)
 						target = units [i];
 						targetIndex = i;
-						targetTitle.text = target.GetComponent<UnitInfo> ().shipTitle;
+						targetTitle.text = target.GetComponent<UnitInfo> ().ShipTitle;
 						targetIcon.GetComponent<AudioSource> ().Play ();
 					}
 				}

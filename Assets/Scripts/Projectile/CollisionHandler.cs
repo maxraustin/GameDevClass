@@ -29,7 +29,7 @@ public class CollisionHandler : MonoBehaviour
             GetComponent<Health>().TakeDamage(int.MaxValue);
         }
         else if (tag.Equals("Projectile"))
-            Destroy(gameObject);
+            gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -42,9 +42,17 @@ public class CollisionHandler : MonoBehaviour
         if (GetComponent<ProjectileInfo>() != null && GetComponent<ProjectileInfo>().Owner == otherUnit)
             return;
 
-        //If we are a projectile and hit a unit on our team: return. (No friendly fire, may change later.)
+        //If we are a projectile and hit a unit on our team: destroy ourself and return. (No friendly fire, may change later.)
         if (GetComponent<ProjectileInfo>() != null && otherUnit.GetComponent<UnitInfo>() != null && GetComponent<ProjectileInfo>().TeamID == otherUnit.GetComponent<UnitInfo>().TeamID)
+        {
+            gameObject.SetActive(false);
             return;
+        }
+
+        //If we are a child of the other unit or the other unit is our child: return.
+        if (transform.IsChildOf(otherUnit.transform) || otherUnit.transform.IsChildOf(transform))
+            return;
+
 
         //Determine damage to deal to other unit.
         int damageToDeal = 0;
@@ -59,6 +67,6 @@ public class CollisionHandler : MonoBehaviour
 
         //If we are a projecile: destroy ourself.
         if (tag.Equals("Projectile"))
-            Destroy(gameObject);
+            gameObject.SetActive(false);
     }
 }
