@@ -6,6 +6,9 @@ using System.Collections;
 /// </summary>
 public class UnitInfo : MonoBehaviour
 {
+	[SerializeField]
+	public string shipTitle;
+
     [SerializeField]
     int teamID;
 
