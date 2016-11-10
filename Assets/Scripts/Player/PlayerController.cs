@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour {
     public Rigidbody myRigidbody;
 
     public int throttlePercentage = MIN_THROTTLE_PERCENT;
-    public float mousePosSensitivity = 200.0f;
+
+    float posOuterTresh = 200.0f;
     float mouseAimSensitivity = 3.0f;
     public Texture2D cursor;
     public float cursorScale = 0.5f;
@@ -85,11 +86,11 @@ public class PlayerController : MonoBehaviour {
         {
             float keyboardRollInput = Input.GetAxisRaw("Horizontal");
 
-            float mousePitchInput = Input.GetAxisRaw("Mouse Y") * mouseAimSensitivity;
+            float mousePitchInput = Input.GetAxisRaw("Mouse Y");
             if (mousePitchInput > 1) mousePitchInput = 1;
             else if (mousePitchInput < -1) mousePitchInput = -1;
 
-            float mouseYawInput = Input.GetAxisRaw("Mouse X") * mouseAimSensitivity;  
+            float mouseYawInput = Input.GetAxisRaw("Mouse X");  
             if (mouseYawInput > 1) mouseYawInput = 1;
             else if (mouseYawInput < -1) mouseYawInput = -1;
 
@@ -97,16 +98,15 @@ public class PlayerController : MonoBehaviour {
         }
         else if (UserSettings.ControlType == ControlType.MousePos)
         {
-            float keyboardRollInput = Input.GetAxisRaw("Horizontal");
+            float keyboardRollInput = Input.GetAxisRaw("Horizontal") * myInfo.MaxRollSpeed;
 
             Vector3 mousePos = Input.mousePosition;
             mousePos.x -= Screen.width / 2;
             mousePos.y -= Screen.height / 2;
 
-            float vertAccel = Math.Abs(mousePos.y) > mousePosSensitivity ? (mousePos.y < 0 ? -1 : 1) * 1.0f : mousePos.y / mousePosSensitivity;
-            float horizAccel = Math.Abs(mousePos.x) > mousePosSensitivity ? (mousePos.x < 0 ? -1 : 1) * 1.0f : mousePos.x / mousePosSensitivity;
+            float vertAccel = Math.Abs(mousePos.y) > posOuterTresh ? (mousePos.y < 0 ? -1 : 1) * 1.0f : mousePos.y / posOuterTresh;
+            float horizAccel = Math.Abs(mousePos.x) > posOuterTresh ? (mousePos.x < 0 ? -1 : 1) * 1.0f : mousePos.x / posOuterTresh;
 
-            //transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel * myInfo.MaxPitchSpeed, keyboardYawInput * myInfo.MaxYawSpeed, -horizAccel * myInfo.MaxRollSpeed));
             transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel * myInfo.MaxPitchSpeed, horizAccel * myInfo.MaxYawSpeed, -keyboardRollInput * myInfo.MaxRollSpeed));
         }
         else if (UserSettings.ControlType == ControlType.MousePosRoll)
@@ -117,11 +117,10 @@ public class PlayerController : MonoBehaviour {
             mousePos.x -= Screen.width / 2;
             mousePos.y -= Screen.height / 2;
 
-            float vertAccel = Math.Abs(mousePos.y) > mousePosSensitivity ? (mousePos.y < 0 ? -1 : 1) * 1.0f : mousePos.y / mousePosSensitivity;
-            float horizAccel = Math.Abs(mousePos.x) > mousePosSensitivity ? (mousePos.x < 0 ? -1 : 1) * 1.0f : mousePos.x / mousePosSensitivity;
+            float vertAccel = Math.Abs(mousePos.y) > posOuterTresh ? (mousePos.y < 0 ? -1 : 1) * 1.0f : mousePos.y / posOuterTresh;
+            float horizAccel = Math.Abs(mousePos.x) > posOuterTresh ? (mousePos.x < 0 ? -1 : 1) * 1.0f : mousePos.x / posOuterTresh;
 
             transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel * myInfo.MaxPitchSpeed, keyboardYawInput * myInfo.MaxYawSpeed, -horizAccel * myInfo.MaxRollSpeed));
-            //transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-vertAccel * myInfo.MaxPitchSpeed, horizAccel * myInfo.MaxYawSpeed, -keyboardRollInput * myInfo.MaxRollSpeed));
         }
         else if (UserSettings.ControlType == ControlType.Legacy)
         {
@@ -131,11 +130,9 @@ public class PlayerController : MonoBehaviour {
             if (mouseInputVertical > 1) mouseInputVertical = 1;
             else if (mouseInputVertical < -1) mouseInputVertical = -1;
 
-            float mouseInputHorizontal = Input.GetAxisRaw("Mouse X");
+            float mouseInputHorizontal = Input.GetAxisRaw("Mouse X") * myInfo.MaxRollSpeed;
             if (mouseInputHorizontal > 1) mouseInputHorizontal = 1;
             else if (mouseInputHorizontal < -1) mouseInputHorizontal = -1;
-
-            //Debug.Log("mouseInputVertical: " + mouseInputVertical + ". mouseInputHorizontal: " + mouseInputHorizontal + ". keyboardYawInput: " + keyboardYawInput);
 
             transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(-mouseInputVertical * myInfo.MaxPitchSpeed, keyboardYawInput * myInfo.MaxYawSpeed, -mouseInputHorizontal * myInfo.MaxRollSpeed));
         }
