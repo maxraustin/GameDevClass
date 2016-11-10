@@ -4,7 +4,15 @@ using System.Collections.Generic;
 public class ProjectilePoolController : MonoBehaviour {
     private static ProjectilePoolController instance;
 
-    public static ProjectilePoolController Instance {  get { return instance; } }
+    public static ProjectilePoolController Instance
+    {
+        get
+        {
+            if (instance == null)
+                throw new System.Exception("No ProjectilePoolController exists. Please ensure that the ProjectileController prefab exists in the scene.");
+            return instance;
+        }
+    }
 
     [SerializeField]
     bool canGrow = true;
