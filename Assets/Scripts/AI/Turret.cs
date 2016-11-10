@@ -5,7 +5,7 @@ public class Turret : MonoBehaviour
 {
     // local vars
     public int lookSpeed = 10;
-    public float turretRange = 300;
+    public float turretRange = 355;
 
     private GameObject targetObject;
     private GameObject turretHead;
@@ -13,7 +13,7 @@ public class Turret : MonoBehaviour
     private Vector3 target;
     private float targetDistance;
     private Quaternion targetRotation;
-    private bool startTracking = false;
+    private bool targetInRange;
     private bool turretHeadRotateSwitch = true;
     private int count = 0;
     private float turretRotateSpeed = .50f;
@@ -23,7 +23,7 @@ public class Turret : MonoBehaviour
     UnitInfo myInfo;
     WeaponsController weaponsController;
     public Rigidbody myRigidbody;
-    SphereCollider sphereCollider;
+    CapsuleCollider capsuleCollider;
 
     // called once when object is instantiated
     void Start()
@@ -31,7 +31,6 @@ public class Turret : MonoBehaviour
         myInfo = GetComponent<UnitInfo>();
         weaponsController = GetComponent<WeaponsController>();
         myRigidbody = GetComponent<Rigidbody>();
-        sphereCollider = GetComponent<SphereCollider>();
 
         // reference to head of turret for proper movement
         turretHead = this.gameObject.transform.GetChild(0).gameObject;
@@ -39,8 +38,10 @@ public class Turret : MonoBehaviour
         // reference to radar on head of turret for proper movement;
         turretRadar = turretHead.transform.GetChild(0).gameObject;
 
-        // set sphere collider radius to that of turretRange
-        sphereCollider.radius = turretRange - 155;
+        if (targetObject == null) AcquireTarget();
+
+        // if target not specified assume you are targeting playerfighter1
+        if (targetObject == null) targetObject = GameObject.Find("PlayerFighter1");
     }
 
     // called once every second
@@ -52,14 +53,20 @@ public class Turret : MonoBehaviour
         // rotate head at all times
         rotateTurretHead();
 
-        // tracking target rotate accordingly
-        if (startTracking)
-        {
-            // find the distance from turret to target
-            targetDistance = Vector3.Distance(gameObject.transform.position, target);
+        // get target position
+        target = targetObject.transform.position;
 
+        // find the distance from turret to target
+        targetDistance = Vector3.Distance(gameObject.transform.position, target);
+        Debug.Log(targetObject.name + " Distance: " + targetDistance);
+
+        // find if target is in range
+        targetInRange = (targetDistance < turretRange) ? true : false;
+
+        // tracking target rotate accordingly
+        if (targetInRange)
+        {
             // rotate base of turret
-            Debug.Log("Rotate Towards Target");
             target.y = transform.position.y;
             targetRotation = Quaternion.LookRotation(target - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lookSpeed);
@@ -74,16 +81,6 @@ public class Turret : MonoBehaviour
             {
                 weaponsController.FireSecondaryWeapon();
             }
-
-            // if target is out of turrets range then stop turning towards target
-            if (targetDistance > turretRange)
-            {
-                startTracking = false;
-                Debug.Log("Distance:  " + targetDistance + " Range:  " + turretRange);
-            }
-
-            // update the targetObject cords
-            target = targetObject.transform.position;
         }
         else // not tracking target... rotate casually
         {
@@ -107,20 +104,6 @@ public class Turret : MonoBehaviour
             turretHeadRotateSwitch = (!turretHeadRotateSwitch);
             count = 0;
         }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (targetObject == null) AcquireTarget();
-
-        // if target not specified assume you are targeting playerfighter1
-        if (targetObject == null) targetObject = GameObject.Find("PlayerFighter1");
-
-        // target the targetobject cords
-        target = targetObject.transform.position;
-
-        // start tracking target
-        startTracking = true;
     }
 
     void AcquireTarget()
