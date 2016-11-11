@@ -40,7 +40,7 @@ public class UnitInfo : MonoBehaviour
     GameObject explosion;
 
     [SerializeField]
-    GameObject notTargettable;
+    bool notTargettable;
 
     [SerializeField]
     bool isPlayerShip;

@@ -3,14 +3,23 @@ using System.Collections;
 
 public class CruiserAIController : MonoBehaviour {
 
+    [SerializeField]
+    float rotationFactor;
+
     GameObject target;
     WeaponsController wc;
+    Rigidbody myRigidbody;
+    UnitInfo myInfo;
 
     float nextTargetAcquireTime = 0;
     float targetAcquireInterval = 3;
 
+    int currentThrottle = 0;
+
     void Start () {
         wc = GetComponent<WeaponsController>();
+        myRigidbody = GetComponent<Rigidbody>();
+        myInfo = GetComponent<UnitInfo>();
 	}
 	
 	void Update () {
@@ -23,7 +32,9 @@ public class CruiserAIController : MonoBehaviour {
 
     void FixedUpdate()
     {
+        AdjustThrottle();
         Rotate();
+        SetVelocity();
     }
 
     void AcquireNewTarget()
@@ -37,7 +48,28 @@ public class CruiserAIController : MonoBehaviour {
         if (target == null)
             target = TargetAcquirer.GetClosestEnemy(gameObject, targetableTypes, false);
 
-        Debug.Log(target);
+        //Debug.Log(target);
+    }
+
+    void AdjustThrottle()
+    {
+        if (target == null)
+        {
+            if (currentThrottle > 0)
+                currentThrottle--;
+            return;
+        }
+
+        if ((target.transform.position - transform.position).magnitude > 250)
+        {
+            if (currentThrottle < 100)
+                currentThrottle++;
+        }
+        else
+        {
+            if (currentThrottle > 0)
+                currentThrottle--;
+        }
     }
 
     void Rotate()
@@ -46,6 +78,11 @@ public class CruiserAIController : MonoBehaviour {
             return;
 
         Quaternion lookRotation = RotationCalculator.RotationToHitTarget(gameObject, wc.PrimaryWeapon, target);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 0.25f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationFactor);
+    }
+
+    void SetVelocity()
+    {
+        myRigidbody.velocity = transform.forward * myInfo.MaxSpeed  * ((float)currentThrottle / 100);
     }
 }

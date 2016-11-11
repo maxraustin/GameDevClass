@@ -5,7 +5,7 @@ using System.Collections;
 /// Provides static GameObject references to all unit prefabs.
 /// </summary>
 public class UnitReferences : MonoBehaviour {
-    static GameObject alliedFighter1, enemyCruiser1, enemyFighter1, playerFighter1;
+    static GameObject alliedCruiserHeavy1, alliedFighter1, enemyCruiserLight1, enemyFighter1, playerFighter1;
 
 
     static bool hasInitialized = false;
@@ -14,16 +14,20 @@ public class UnitReferences : MonoBehaviour {
     {
         if (!hasInitialized)
         {
-            enemyCruiser1 = Resources.Load("Units/Ships/EnemyCruiser1", typeof(GameObject)) as GameObject;
-            enemyFighter1 = Resources.Load("Units/Ships/EnemyFighter1", typeof(GameObject)) as GameObject;
+            alliedCruiserHeavy1 = Resources.Load("Units/Ships/AlliedCruiserHeavy1", typeof(GameObject)) as GameObject;
             alliedFighter1 = Resources.Load("Units/Ships/AlliedFighter1", typeof(GameObject)) as GameObject;
+
+            enemyCruiserLight1 = Resources.Load("Units/Ships/EnemyCruiserLight1", typeof(GameObject)) as GameObject;
+            enemyFighter1 = Resources.Load("Units/Ships/EnemyFighter1", typeof(GameObject)) as GameObject;
+            
             playerFighter1 = Resources.Load("Units/Ships/PlayerFighter1", typeof(GameObject)) as GameObject;
 
             hasInitialized = true;
         }
     }
-    public static GameObject EnemyCruiser1 { get { if (!hasInitialized) Initialize(); return enemyCruiser1; } }
+    public static GameObject EnemyCruiserLight1 { get { if (!hasInitialized) Initialize(); return enemyCruiserLight1; } }
     public static GameObject EnemyFighter1 { get { if (!hasInitialized) Initialize(); return enemyFighter1; } }
     public static GameObject AlliedFighter1 { get { if (!hasInitialized) Initialize(); return alliedFighter1; } }
+    public static GameObject AlliedCruiserHeavy1 { get { if (!hasInitialized) Initialize(); return alliedCruiserHeavy1; } }
     public static GameObject PlayerFighter1 { get { if (!hasInitialized) Initialize(); return playerFighter1; } }
 }
