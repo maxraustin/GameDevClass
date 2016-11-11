@@ -86,14 +86,21 @@ public class GameMasterScripts : MonoBehaviour {
 	/// Takes an integer, the level to load. Call this to load a specific stage
 	/// </summary>
 	public void LoadLevel(int choice){
-		switch (choice) {
-		case 0:
-			SceneManager.LoadScene ("TestAaron");
-			break;
-		case 1:
-			SceneManager.LoadScene ("Level1");
-			break;
-		}
+        switch (choice)
+        {
+            case 0:
+                SceneManager.LoadScene("TestAaron");
+                break;
+            case 1:
+                SceneManager.LoadScene("Trench");
+                break;
+            case 2:
+                SceneManager.LoadScene("Level1");
+                break;
+            case 3:
+                SceneManager.LoadScene("Level3");
+                break;
+        }
 	}
 
 	// Update is called once per frame
