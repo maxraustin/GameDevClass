@@ -28,7 +28,8 @@ public class GuidedMissile : MonoBehaviour {
 
         // target the targetObject cords
         //target = targetObject.transform.position;
-
+        if (GetComponent<ProjectileInfo>().Owner == UnitTracker.PlayerShip && TargettingController.Instance != null)
+            targetObject = TargettingController.Instance.Target;
         if (targetObject == null) AcquireTarget();
     }
 

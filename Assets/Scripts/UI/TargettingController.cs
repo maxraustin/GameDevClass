@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class TargettingController : MonoBehaviour {
+    static TargettingController instance;
+
 	//Text to show the title of the target
 	[SerializeField]
 	Text targetTitle;
@@ -22,10 +24,18 @@ public class TargettingController : MonoBehaviour {
 	//Players camera
 	Camera playerCam;
 	//Current target
-	[SerializeField]
 	GameObject target;
+
 	[SerializeField]
 	int targetIndex;
+
+    public static TargettingController Instance { get { return instance; } }
+    public GameObject Target { get { return target; } }
+
+    void Awake()
+    {
+        instance = this;
+    }
 	// Use this for initialization
 	void Start () {
 		playerObj = UnitTracker.PlayerShip;

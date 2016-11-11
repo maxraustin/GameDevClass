@@ -65,8 +65,13 @@ public class RotationCalculator : MonoBehaviour {
     public static Quaternion RotationToHitTarget(GameObject shooter, GameObject projectile, GameObject target, RandomOffset offsetAmount, Vector3 aimOffset, bool rotationInstant)
     {
         Vector3 p0 = target.transform.position + aimOffset;
-        Vector3 v0 = target.GetComponent<Rigidbody>().velocity.normalized;
-        float s0 = target.GetComponent<Rigidbody>().velocity.magnitude;
+        Vector3 v0 = Vector3.zero;
+        float s0 = 0;
+        if (target.GetComponent<Rigidbody>() != null)
+        {
+            v0 = target.GetComponent<Rigidbody>().velocity.normalized;
+            s0 = target.GetComponent<Rigidbody>().velocity.magnitude;
+        }
         Vector3 p1 = shooter.transform.position;
         float s1 = projectile.GetComponent<ProjectileInfo>().Speed;
 
