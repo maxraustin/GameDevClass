@@ -113,6 +113,29 @@ public class UnitTracker : MonoBehaviour
     }
 
     /// <summary>
+    /// Returns the amount of active units that are enemies of the player.
+    /// </summary>
+    /// <returns>Count of units that are enemies of the player.</returns>
+    public static int GetActiveAllyCount()
+    {
+        if (!hasInitialized)
+            Initialize();
+
+        //Remove any null objects from the list.
+        activeUnits.RemoveAll(unit => unit == null);
+
+        //Count enemy units in activeUnits.
+        int AllyCount = 0;
+        foreach (GameObject go in activeUnits)
+        {
+            if (playerTeamID != -1 && go != null && go.GetComponent<UnitInfo>() != null && go.GetComponent<UnitInfo>().TeamID == playerTeamID)
+                AllyCount++;
+        }
+
+        return AllyCount;
+    }
+
+    /// <summary>
     /// Returns all the active units that are allies of the player. Does not return the player's unit.
     /// </summary>
     /// <returns>List of units that are allies of the player. Player's unit is not included in the list.</returns>
