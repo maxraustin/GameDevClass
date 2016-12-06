@@ -96,6 +96,7 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void Button_ReturnToMainMenu()
     {
+		Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
