@@ -45,6 +45,9 @@ public class UnitInfo : MonoBehaviour
     [SerializeField]
     bool isPlayerShip;
 
+    [SerializeField]
+    bool isPooled;
+
     public GameObject Explosion
     {
         get { return explosion; }
@@ -55,6 +58,11 @@ public class UnitInfo : MonoBehaviour
         get { return isPlayerShip; }
     }
 
+    public bool IsPooled
+    {
+        get { return isPooled; }
+        set { isPooled = value; }
+    }
     public int MaxHealth
     {
         get { return maxHealth; }

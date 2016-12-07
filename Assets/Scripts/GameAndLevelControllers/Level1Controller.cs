@@ -4,6 +4,13 @@ using System.Collections;
 public class Level1Controller : BaseLevelController {
     void Start()
     {
+        //Set good initial pool sizes and initialize object pools.
+        PoolController.Instance.SetInitialPoolSize(ProjectileReferences.SmallLaser, 400);
+        PoolController.Instance.SetInitialPoolSize(ProjectileReferences.LargeLaser, 5);
+        PoolController.Instance.SetInitialPoolSize(ProjectileReferences.GuidedMissile, 5);
+        PoolController.Instance.SetInitialPoolSize(UnitReferences.EnemyFighter1, 30);
+        PoolController.Instance.Initialize();
+
         HUDController.Instance.SetObjectiveTextType(ObjectiveTextType.NEUTRALIZE_WAVES);
     }
 

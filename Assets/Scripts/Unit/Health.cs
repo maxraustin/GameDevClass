@@ -121,7 +121,10 @@ public class Health : MonoBehaviour
             }
         }
 
-        Destroy(gameObject);
+        if (myInfo.IsPooled)
+            gameObject.SetActive(false);
+        else
+            Destroy(gameObject);
     }
 
     public void TakeDamage(int dmg)

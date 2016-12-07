@@ -49,12 +49,14 @@ public class RadarController : MonoBehaviour {
                         //Draw the unit on the radar, maintain scale, rotation etc
                         if (units[i].GetComponent<UnitInfo>().TeamID != playerTeamID)
                         {
-                            Instantiate(enemyIcon, new Vector3((transform.position.x - distFromPlayer.x / (radarRange / 150)), (transform.position.y - distFromPlayer.y / (radarRange / 150)), transform.position.z), Quaternion.identity, transform);
+                            //Instantiate(enemyIcon, new Vector3((transform.position.x - distFromPlayer.x / (radarRange / 150)), (transform.position.y - distFromPlayer.y / (radarRange / 150)), transform.position.z), Quaternion.identity, transform);
+                            PoolController.Instance.GetObject(enemyIcon, new Vector3((transform.position.x - distFromPlayer.x / (radarRange / 150)), (transform.position.y - distFromPlayer.y / (radarRange / 150)), transform.position.z), Quaternion.identity, transform);
                             enemyIcon.transform.localScale = new Vector3(1f, 1f, 1f);
                         }
                         else
                         {
-                            Instantiate(allyIcon, new Vector3((transform.position.x - distFromPlayer.x / (radarRange / 150)), (transform.position.y - distFromPlayer.y / (radarRange / 150)), transform.position.z), Quaternion.identity, transform);
+                            //Instantiate(allyIcon, new Vector3((transform.position.x - distFromPlayer.x / (radarRange / 150)), (transform.position.y - distFromPlayer.y / (radarRange / 150)), transform.position.z), Quaternion.identity, transform);
+                            PoolController.Instance.GetObject(allyIcon, new Vector3((transform.position.x - distFromPlayer.x / (radarRange / 150)), (transform.position.y - distFromPlayer.y / (radarRange / 150)), transform.position.z), Quaternion.identity, transform);
                             allyIcon.transform.localScale = new Vector3(1f, 1f, 1f); //Why is this line even here?
                         }
 					}

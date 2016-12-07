@@ -14,29 +14,29 @@ public class UnitSpawner : MonoBehaviour {
     /// <returns>Reference to the spawned unit.</returns>
     public static GameObject SpawnUnit(GameObject unitType, Vector3 spawnLocation)
     {
-        if (unitType == null)
+        /*if (unitType == null)
             throw new MissingReferenceException("Given unitType was null, can't spawn.");
         if (unitType.GetComponent<UnitInfo>() == null)
-            throw new MissingComponentException("Given unitType doesn't have a UnitInfo component. Is it a unit?");
+            throw new MissingComponentException("Given unitType doesn't have a UnitInfo component. Is it a unit?");*/
 
         Quaternion lookRotation = Quaternion.identity;
         if (unitType.GetComponent<UnitInfo>().IsPlayerShip)
         {
             lookRotation = RotationCalculator.RotationTowardZero(spawnLocation);
-            if(UnitTracker.PlayerShip != null)
-                throw new System.Exception("A player ship already exists in this scene and you are trying to instantiate another player ship.");
+            /*if(UnitTracker.PlayerShip != null)
+                throw new System.Exception("A player ship already exists in this scene and you are trying to instantiate another player ship.");*/
         }
         else
             lookRotation = RotationCalculator.RotationTowardPlayerShip(spawnLocation);
             
-        GameObject unit = Instantiate(unitType, spawnLocation, lookRotation) as GameObject;
+        /*GameObject unit = Instantiate(unitType, spawnLocation, lookRotation) as GameObject;
 
         if (unit.GetComponent<UnitInfo>() != null && unit.GetComponent<UnitInfo>().IsPlayerShip)
             UnitTracker.PlayerShip = unit;
         else
-            UnitTracker.AddUnit(unit);
+            UnitTracker.AddUnit(unit);*/
 
-        return unit;
+        return SpawnUnit(unitType, spawnLocation, lookRotation);
     }
 
     /// <summary>
@@ -55,7 +55,11 @@ public class UnitSpawner : MonoBehaviour {
         if (unitType.GetComponent<UnitInfo>().IsPlayerShip && UnitTracker.PlayerShip != null)
             throw new System.Exception("A player ship already exists in this scene and you are trying to instantiate another player ship.");
 
-        GameObject unit = Instantiate(unitType, spawnLocation, spawnRotation) as GameObject;
+        GameObject unit;
+        if (unitType.GetComponent<UnitInfo>().IsPooled)
+            unit = PoolController.Instance.GetObject(unitType, spawnLocation, spawnRotation);
+        else
+            unit = Instantiate(unitType, spawnLocation, spawnRotation) as GameObject;
 
         if (unit.GetComponent<UnitInfo>() != null && unit.GetComponent<UnitInfo>().IsPlayerShip)
             UnitTracker.PlayerShip = unit;
