@@ -18,10 +18,10 @@ public class DestroyAfterDelay : MonoBehaviour {
     }
 
 	void OnEnable () {
-        Invoke("Destroy", delay);
+        Invoke("Kill", delay);
 	}
 	
-	void Destroy()
+	void Kill()
     {
         if (actuallyDestroy)
             Destroy(gameObject);

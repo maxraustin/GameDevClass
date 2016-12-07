@@ -14,27 +14,11 @@ public class UnitSpawner : MonoBehaviour {
     /// <returns>Reference to the spawned unit.</returns>
     public static GameObject SpawnUnit(GameObject unitType, Vector3 spawnLocation)
     {
-        /*if (unitType == null)
-            throw new MissingReferenceException("Given unitType was null, can't spawn.");
-        if (unitType.GetComponent<UnitInfo>() == null)
-            throw new MissingComponentException("Given unitType doesn't have a UnitInfo component. Is it a unit?");*/
-
         Quaternion lookRotation = Quaternion.identity;
         if (unitType.GetComponent<UnitInfo>().IsPlayerShip)
-        {
             lookRotation = RotationCalculator.RotationTowardZero(spawnLocation);
-            /*if(UnitTracker.PlayerShip != null)
-                throw new System.Exception("A player ship already exists in this scene and you are trying to instantiate another player ship.");*/
-        }
         else
             lookRotation = RotationCalculator.RotationTowardPlayerShip(spawnLocation);
-            
-        /*GameObject unit = Instantiate(unitType, spawnLocation, lookRotation) as GameObject;
-
-        if (unit.GetComponent<UnitInfo>() != null && unit.GetComponent<UnitInfo>().IsPlayerShip)
-            UnitTracker.PlayerShip = unit;
-        else
-            UnitTracker.AddUnit(unit);*/
 
         return SpawnUnit(unitType, spawnLocation, lookRotation);
     }
@@ -61,12 +45,34 @@ public class UnitSpawner : MonoBehaviour {
         else
             unit = Instantiate(unitType, spawnLocation, spawnRotation) as GameObject;
 
-        if (unit.GetComponent<UnitInfo>() != null && unit.GetComponent<UnitInfo>().IsPlayerShip)
+        if (unit.GetComponent<UnitInfo>().IsPlayerShip)
             UnitTracker.PlayerShip = unit;
-        else
+        else if (!unit.GetComponent<UnitInfo>().NotTargettable)
             UnitTracker.AddUnit(unit);
 
         return unit;
+    }
+
+
+    /// <summary>
+    /// Spawns a given count of a given unit type within a given GameObject, then sets the spawned GameObjects on the closest collidable GameObject below them.
+    /// </summary>
+    /// <param name="unitType">Type of unit to spawn.</param>
+    /// <param name="spawnCount">The amount of units to spawn.</param>
+    /// <param name="spawnBox">The GameObject to spawn the units inside.</param>
+    /// <returns>A list of all the spawned GameObjects.</returns>
+    public static List<GameObject> SpawnUnitsInAreaAndFall(GameObject unitType, int spawnCount, GameObject spawnBox)
+    {
+        List<GameObject> spawnedUnits = SpawnUnitsInArea(unitType, spawnCount, spawnBox);
+
+        foreach(GameObject unit in spawnedUnits)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(unit.transform.position, Vector3.down, out hit))
+                unit.transform.position = hit.point;
+        }
+
+        return spawnedUnits;
     }
 
     /// <summary>

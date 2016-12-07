@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
         UnitTracker.Clear();
         ProjectileTracker.Clear();
 
-        UnitSpawner.SpawnUnitsInArea(GameSettings.CurrentPlayerShip, 1, currentLevelController.CurrentPlayerSpawn);
+        UnitSpawner.SpawnUnit(GameSettings.CurrentPlayerShip, currentLevelController.CurrentPlayerSpawn.transform.position, RotationCalculator.RotationTowardLocation(currentLevelController.CurrentPlayerSpawn.transform.position, currentLevelController.PositionPlayerLooksAtSpawn));
     }
 
     void Start()

@@ -17,7 +17,7 @@ public class PoolController : MonoBehaviour {
         }
     }
 
-    const int poolCount = 6; //Amount of pools to create.
+    const int poolCount = 7; //Amount of pools to create.
 
     [SerializeField]
     bool canGrow = true; //Can pools grow if all objects are in use?
@@ -60,6 +60,7 @@ public class PoolController : MonoBehaviour {
         objects[3] = Resources.Load("Units/Ships/EnemyFighter1", typeof(GameObject)) as GameObject;
         objects[4] = Resources.Load("uiAssets/Radar/AllyIcon", typeof(GameObject)) as GameObject;
         objects[5] = Resources.Load("uiAssets/Radar/EnemyIcon", typeof(GameObject)) as GameObject;
+        objects[6] = Resources.Load("Units/LaserTurret", typeof(GameObject)) as GameObject;
     }
 
 	public void Initialize()
@@ -78,6 +79,7 @@ public class PoolController : MonoBehaviour {
         parents[3] = unitParent;
         parents[4] = null;
         parents[5] = null;
+        parents[6] = unitParent;
 
         //Initialize pool array, pools, and populate pools with GameObjects.
         pools = new List<GameObject>[poolCount];
@@ -89,7 +91,7 @@ public class PoolController : MonoBehaviour {
                 GameObject obj = Instantiate(objects[i]);
                 obj.SetActive(false);
                 if (parents[i] != null)
-                    obj.transform.parent = parents[i].transform;
+                    obj.transform.SetParent(parents[i].transform);
                 pools[i].Add(obj);
             }
         }
@@ -175,7 +177,7 @@ public class PoolController : MonoBehaviour {
             GameObject obj = Instantiate(objectType);
             obj.SetActive(true);
             if (parents[index] != null)
-                obj.transform.parent = parents[index].transform;
+                obj.transform.SetParent(parents[index].transform);
             pools[index].Add(obj);
             return obj;
         }

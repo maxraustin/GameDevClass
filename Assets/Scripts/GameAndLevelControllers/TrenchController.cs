@@ -5,13 +5,9 @@ public class TrenchController : BaseLevelController {
 
 	// Use this for initialization
 	void Start () {
+        UnitSpawner.SpawnUnitsInAreaAndFall(UnitReferences.LaserTurret, 200, enemySpawns[7]);
+    }
 	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
     protected override void PlayerEnteredBoundary(GameObject boundary)
     {
         if (boundary == boundaries[0])

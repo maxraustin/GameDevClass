@@ -47,14 +47,17 @@ public class GuidedMissile : MonoBehaviour {
     // called once every second
     void Update()
     {
-        if (!ownerAndTeamSet)
-            CheckIfOwnerAndTeamSet();
-
         // set up the timer
         timer += Time.deltaTime;
 
         // give the missile speed
         transform.Translate(0, 0, speed / 100);
+
+        if (!ownerAndTeamSet)
+        {
+            CheckIfOwnerAndTeamSet();
+            return;
+        }
 
         if (targetObject == null || targetObject.activeInHierarchy == false)
         {
@@ -102,23 +105,23 @@ public class GuidedMissile : MonoBehaviour {
             if (GetComponent<ProjectileInfo>().Owner == UnitTracker.PlayerShip && TargettingController.Instance != null)
                 targetObject = TargettingController.Instance.Target;
 
-            if (targetObject != null)
-                return;
-
-            GameObject closestEnemy = null;
-            foreach (GameObject go in UnitTracker.GetActiveEnemies(gameObject))
+            if (targetObject == null)
             {
-                if (closestEnemy == null)
+                GameObject closestEnemy = null;
+                foreach (GameObject go in UnitTracker.GetActiveEnemies(gameObject))
                 {
-                    closestEnemy = go;
-                    continue;
+                    if (closestEnemy == null)
+                    {
+                        closestEnemy = go;
+                        continue;
+                    }
+
+                    if ((go.transform.position - transform.position).magnitude < (closestEnemy.transform.position - transform.position).magnitude)
+                        closestEnemy = go;
                 }
 
-                if ((go.transform.position - transform.position).magnitude < (closestEnemy.transform.position - transform.position).magnitude)
-                    closestEnemy = go;
+                targetObject = closestEnemy;
             }
-
-            targetObject = closestEnemy;
 
             if (targetObject != null)
                 target = targetObject.transform.position;

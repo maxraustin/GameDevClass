@@ -32,6 +32,9 @@ public class UnitTracker : MonoBehaviour
         }
         set
         {
+            if (!hasInitialized)
+                Initialize();
+
             playerShip = value;
             if (playerShip != null && playerShip.GetComponent<UnitInfo>() != null)
             {

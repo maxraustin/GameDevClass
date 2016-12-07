@@ -13,17 +13,18 @@ public class AIController : MonoBehaviour
     float targetTimer; // Amount of time target has been set 
     float maxTargetLength = 10.0f; // Maximum amount of time to have a target before searching for a new one
 
-    void Start()
+    void Awake()
     {
         myInfo = GetComponent<UnitInfo>();
         weaponsController = GetComponent<WeaponsController>();
         myRigidbody = GetComponent<Rigidbody>();
+    }
 
-        // set target on spawn
+    void OnEnable() {
+        /*if (!UnitTracker.GetActiveUnits().Contains(this.gameObject))
+            UnitTracker.AddUnit(this.gameObject);*/
+
         target = GetEasiestTarget();
-
-        if (!UnitTracker.GetActiveUnits().Contains(this.gameObject))
-            UnitTracker.AddUnit(this.gameObject);
     }
 
     void Update()

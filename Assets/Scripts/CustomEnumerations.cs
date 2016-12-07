@@ -24,3 +24,5 @@ public enum SIMember {
 }
 
 public enum TimerTextType { ELAPSED = 1, REMAINING = 0 }
+
+public enum TurretColor { BLUE = 0, RED = 1 }

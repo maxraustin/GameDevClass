@@ -48,7 +48,7 @@ public class TargettingController : MonoBehaviour {
 		for (int i = 0; i < units.Count; i++) {
 			if (units [i] != null && units [i].GetComponent<UnitInfo> () != null) {
 				//First, we need to check if we currently have a target. If we don't just assign the first one for now
-				if (target == null) {
+				if (target == null || !target.activeInHierarchy) {
 					target = units [i];
 					targetIndex = i;
 				}
@@ -80,7 +80,7 @@ public class TargettingController : MonoBehaviour {
 
 	void FixedUpdate(){
 		//If we have a target, we get it's screen point and draw the icon there
-		if (target != null) {
+		if (target != null && target.activeInHierarchy) {
 			targetIcon.GetComponent<Image> ().enabled = true;
 			Vector2 targetScreenLoc = playerCam.WorldToScreenPoint (target.transform.position);
 			targetIcon.transform.position = targetScreenLoc;

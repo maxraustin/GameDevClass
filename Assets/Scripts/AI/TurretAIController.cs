@@ -18,6 +18,15 @@ public class TurretAIController : MonoBehaviour {
     [SerializeField]
     int maxTargetDistance = 500;
 
+    [SerializeField]
+    TurretColor color;
+
+    [SerializeField]
+    Material blueMaterial;
+
+    [SerializeField]
+    Material redMaterial;
+
     GameObject target, turretBody, turretHead;
     WeaponsController wc;
 
@@ -40,10 +49,30 @@ public class TurretAIController : MonoBehaviour {
         else
             GetComponent<CapsuleCollider>().enabled = true;
 
-        if (!GetComponent<UnitInfo>().NotTargettable)
-            UnitTracker.AddUnit(gameObject);
+        if (blueMaterial != null & redMaterial != null)
+        {
+            Material chosenMaterial = blueMaterial;
+            if (color == TurretColor.RED)
+                chosenMaterial = redMaterial;
+
+            Material[] mats = transform.Find("TurretBody").GetComponent<MeshRenderer>().materials;
+            mats[1] = chosenMaterial;
+            transform.Find("TurretBody").GetComponent<MeshRenderer>().materials = mats;
+
+            mats = transform.Find("TurretHead/Model").GetComponent<MeshRenderer>().materials;
+            mats[0] = chosenMaterial;
+            transform.Find("TurretHead/Model").GetComponent<MeshRenderer>().materials = mats;
+        }
     }
 	
+    void OnEnable()
+    {
+        /*
+        if (!GetComponent<UnitInfo>().NotTargettable)
+            UnitTracker.AddUnit(gameObject);
+            */
+    }
+
 	// Update is called once per frame
 	void Update () {
         if (target != null && canFire)
