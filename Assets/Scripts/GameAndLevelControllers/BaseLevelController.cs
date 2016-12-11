@@ -22,6 +22,9 @@ public abstract class BaseLevelController : MonoBehaviour
     protected GameObject[] allySpawns;
 
     [SerializeField]
+    protected GameObject[] goToPoints;
+
+    [SerializeField]
     protected Vector3 positionPlayerLooksAtSpawn;
 
     protected int currentPhase = 0;

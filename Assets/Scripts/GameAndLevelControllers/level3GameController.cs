@@ -5,6 +5,7 @@ public class level3GameController : BaseLevelController
 {
     public int enemiesKilled = 0;
     public int alliesKilled = 0;
+    public bool bossSpawned = false;
     // Use this for initialization
     void Start()
     {
@@ -24,7 +25,15 @@ public class level3GameController : BaseLevelController
         
         if (UnitTracker.GetActiveEnemyCount() == 0)
         {
-            GameController.Instance.PlayerVictorious();
+            if (bossSpawned == false)
+            {
+                UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyBattleship, 1, enemySpawns[3]);
+                bossSpawned = true;
+            }
+            else
+            {
+                GameController.Instance.PlayerVictorious();
+            }
         }
         if(UnitTracker.GetActiveEnemyCount() < 20 && enemiesKilled < 20)
         {
@@ -33,7 +42,7 @@ public class level3GameController : BaseLevelController
             UnitSpawner.SpawnUnitsInArea(UnitReferences.EnemyFighter1,tempEnemiesKilled, enemySpawns[randomSpawn]);
             enemiesKilled += tempEnemiesKilled;
         }
-        if(UnitTracker.GetActiveAllyCount()< 10)
+        if(UnitTracker.GetActiveAllyCount()< 10 && alliesKilled < 15)
         {
             int randomSpawn = Random.Range(0, 2);
             int temAllyKilled = 10 - UnitTracker.GetActiveAllyCount();
