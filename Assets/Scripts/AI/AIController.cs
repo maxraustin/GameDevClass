@@ -95,6 +95,19 @@ public class AIController : MonoBehaviour
         myRigidbody.velocity = transform.forward * myInfo.MaxSpeed * ((float)throttlePercentage / 100);
     }
 
+    public GameObject getTarget() {
+        return target;
+    }
+
+    public bool setTarget(GameObject obj) {
+        if (target.name == "ai_waypoint") {
+            return false;
+        } else {
+            target = obj;
+            return true;
+        }
+    }
+
     // Gets the closest enemy
     GameObject GetClosestTarget() {
         GameObject closestTarget = null;
