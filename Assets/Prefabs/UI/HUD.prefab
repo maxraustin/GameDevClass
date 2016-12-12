@@ -792,7 +792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48630b99d12b08b4c8946a4407eb029b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  texture: {fileID: 2800000, guid: 52d2979f886ee9b46af3d68833a26760, type: 3}
+  texture: {fileID: 2800000, guid: e16e839a5686a48499b0d394b910d7c6, type: 3}
   scale: 0.5
 --- !u!114 &114000011753716944
 MonoBehaviour:
