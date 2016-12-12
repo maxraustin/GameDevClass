@@ -44,7 +44,10 @@ public class CruiserAIController : MonoBehaviour {
     {
         if (goToPoints != null)
         {
-            target = goToPoints[WayPointNumber];
+            if (WayPointNumber < goToPoints.Length)
+            {
+                target = goToPoints[WayPointNumber];
+            }
         }
         else {
             nextTargetAcquireTime = Time.time + targetAcquireInterval;
