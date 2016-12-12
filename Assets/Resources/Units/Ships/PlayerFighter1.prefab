@@ -401,10 +401,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011610822806}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.04797812, y: 0, z: 0, w: 0.99884844}
   m_LocalPosition: {x: -1, y: -0.30000257, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 5.5, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013150613104}
   m_RootOrder: 2
@@ -414,10 +414,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010056786316}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.04797812, y: 0, z: 0, w: 0.99884844}
   m_LocalPosition: {x: 1, y: -0.30000257, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 5.5, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013150613104}
   m_RootOrder: 1
@@ -913,6 +913,7 @@ MonoBehaviour:
   explosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
   notTargettable: 0
   isPlayerShip: 1
+  isPooled: 0
 --- !u!114 &114000011712009730
 MonoBehaviour:
   m_ObjectHideFlags: 1

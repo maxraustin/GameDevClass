@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
-    const float MAX_Z = -25;
-    const float MIN_Z = -15;
+    const float MAX_Z = -12;
+	const float MIN_Z = -8;
 
     [SerializeField]
     bool isOverviewCamera;
@@ -54,7 +54,7 @@ public class CameraController : MonoBehaviour {
             float z_offset = ((((float)(parentPlayerController.throttlePercentage - PlayerController.MIN_THROTTLE_PERCENT) /
                 (float)(PlayerController.MAX_THROTTLE_PERCENT - PlayerController.MIN_THROTTLE_PERCENT))) *
                 (MAX_Z - MIN_Z)) + MIN_Z;
-            transform.localPosition = new Vector3(0, 10, z_offset);
+            transform.localPosition = new Vector3(0, 5, z_offset);
         }
     }
    
